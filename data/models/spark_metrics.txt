@@ -1,0 +1,14 @@
+Spark Model Results
+============================================================
+
+Logistic Regression:
+  Accuracy: 0.8141
+  AUC: 0.8494
+  Time: 2.00s
+
+Random Forest:
+  Accuracy: 0.8149
+  AUC: 0.8579
+  Time: 1.31s
+
+Best: Random Forest

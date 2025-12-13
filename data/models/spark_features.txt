@@ -1,0 +1,15 @@
+SeniorCitizen
+tenure
+MonthlyCharges
+TotalCharges
+gender_encoded
+Partner_encoded
+Dependents_encoded
+PhoneService_encoded
+PaperlessBilling_encoded
+Contract_MTM
+Contract_OneYear
+Contract_TwoYear
+InternetService_DSL
+InternetService_Fiber
+InternetService_No
