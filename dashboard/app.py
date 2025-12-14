@@ -22,48 +22,46 @@ except:
 # Page config
 st.set_page_config(
     page_title="ChurnGuard Analytics | Keystone Data Solutions",
-    page_icon="🔮",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # =========================
-# Modern Neon Dark Theme CSS
+# Professional Dark Theme CSS
 # =========================
 st.markdown("""
 <style>
-/* Import modern fonts */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap');
+/* Import clean, professional fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
 
 /* Global Styles */
 .stApp {
-    background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
-    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
+    font-family: 'Inter', sans-serif;
 }
 
-/* Hide default Streamlit branding */
+/* Hide default Streamlit elements */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
+.stDeployButton {display: none;}
 
 /* Main Header */
 .main-header {
-    font-family: 'Syne', sans-serif;
-    font-size: 3.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 3rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #00e5ff 0%, #7c3aed 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff;
     text-align: center;
     margin-bottom: 0.5rem;
     letter-spacing: -1px;
-    animation: fadeInDown 0.8s ease-out;
+    animation: fadeInDown 0.6s ease-out;
 }
 
 @keyframes fadeInDown {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
@@ -73,66 +71,60 @@ footer {visibility: hidden;}
 
 .subtitle {
     text-align: center;
-    color: #94a3b8;
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    color: #a0aec0;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    animation: fadeIn 1s ease-out 0.3s backwards;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    letter-spacing: 2px;
+    font-weight: 500;
 }
 
 /* Sidebar Styling */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #151a2b 0%, #0a0e1a 100%);
-    border-right: 1px solid #1e293b;
+    background: #0f1419;
+    border-right: 1px solid #2d3748;
 }
 
 [data-testid="stSidebar"] .css-1d391kg {
-    color: #f1f5f9;
+    color: #ffffff;
 }
 
 /* Navigation Radio Buttons */
 [data-testid="stSidebar"] label {
-    color: #cbd5e1 !important;
+    color: #cbd5e0 !important;
     font-weight: 500;
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1.25rem;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
 }
 
 [data-testid="stSidebar"] label:hover {
-    background: rgba(0, 229, 255, 0.1);
-    color: #00e5ff !important;
+    background: rgba(66, 153, 225, 0.15);
+    color: #63b3ed !important;
 }
 
 /* KPI Cards */
 .kpi-card {
-    background: linear-gradient(135deg, #151a2b 0%, #1a2032 100%);
-    padding: 1.5rem;
-    border-radius: 16px;
-    border: 1px solid #1e293b;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    position: relative;
-    overflow: hidden;
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    padding: 1.75rem;
+    border-radius: 12px;
+    border: 1px solid #4a5568;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-    animation: slideUp 0.6s ease-out backwards;
+    animation: slideUp 0.5s ease-out backwards;
 }
 
 .kpi-card:hover {
-    transform: translateY(-5px);
-    border-color: #00e5ff;
-    box-shadow: 0 15px 50px rgba(0, 229, 255, 0.2);
+    transform: translateY(-3px);
+    border-color: #63b3ed;
+    box-shadow: 0 8px 24px rgba(99, 179, 237, 0.2);
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -146,170 +138,302 @@ footer {visibility: hidden;}
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #00e5ff, #7c3aed);
+    height: 3px;
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    border-radius: 12px 12px 0 0;
 }
 
 .kpi-green::before {
-    background: linear-gradient(90deg, #10b981, #059669);
+    background: #48bb78;
 }
 
 .kpi-yellow::before {
-    background: linear-gradient(90deg, #f59e0b, #d97706);
+    background: #ed8936;
 }
 
 .kpi-red::before {
-    background: linear-gradient(90deg, #ef4444, #dc2626);
+    background: #f56565;
 }
 
 .kpi-title {
-    font-size: 0.85rem;
-    color: #94a3b8;
+    font-size: 0.875rem;
+    color: #cbd5e0;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
 }
 
 .kpi-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.75rem;
-    font-weight: 700;
-    color: #f1f5f9;
+    font-family: 'Inter', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
     line-height: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.kpi-change {
-    font-size: 0.9rem;
+.kpi-subtitle {
+    font-size: 0.875rem;
     margin-top: 0.75rem;
-    display: flex;
+    color: #a0aec0;
+    font-weight: 500;
+}
+
+/* Status Indicator */
+.status-indicator {
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(72, 187, 120, 0.15);
+    border: 1px solid #48bb78;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #48bb78;
 }
 
-.kpi-change.positive {
-    color: #10b981;
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #48bb78;
+    animation: pulse 2s infinite;
 }
 
-.kpi-change.negative {
-    color: #ef4444;
-}
-
-.kpi-change.neutral {
-    color: #94a3b8;
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
 }
 
 /* Badges */
 .badge {
     display: inline-block;
     padding: 0.5rem 1rem;
-    border-radius: 50px;
-    font-size: 0.85rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .badge-green {
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
-    border: 1px solid #10b981;
+    background: rgba(72, 187, 120, 0.2);
+    color: #48bb78;
+    border: 1px solid #48bb78;
 }
 
 .badge-yellow {
-    background: rgba(245, 158, 11, 0.2);
-    color: #f59e0b;
-    border: 1px solid #f59e0b;
+    background: rgba(237, 137, 54, 0.2);
+    color: #ed8936;
+    border: 1px solid #ed8936;
 }
 
 .badge-red {
-    background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
-    border: 1px solid #ef4444;
+    background: rgba(245, 101, 101, 0.2);
+    color: #f56565;
+    border: 1px solid #f56565;
 }
 
 /* Section Headers */
 .section-header {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #f1f5f9;
-    margin: 2rem 0 1rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    color: #ffffff;
+    margin: 2rem 0 1.25rem 0;
+    padding-left: 1rem;
+    border-left: 4px solid #4299e1;
 }
 
-.section-header::before {
-    content: '';
-    width: 6px;
-    height: 40px;
-    background: linear-gradient(180deg, #00e5ff, #7c3aed);
-    border-radius: 3px;
+/* Cards */
+.card {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    border: 1px solid #4a5568;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 1rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card h3 {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
 }
 
 /* Input Styling */
 .stTextInput > div > div > input {
-    background: #0a0e1a;
-    border: 1px solid #1e293b;
+    background: #1a202c;
+    border: 1px solid #4a5568;
     border-radius: 8px;
-    color: #f1f5f9;
+    color: #ffffff;
     font-size: 1rem;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
+    padding: 0.875rem 1rem;
+    transition: all 0.2s ease;
 }
 
 .stTextInput > div > div > input:focus {
-    border-color: #00e5ff;
-    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    background: #2d3748;
+}
+
+.stTextInput > label {
+    color: #cbd5e0 !important;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 /* Button Styling */
 .stButton > button {
-    background: linear-gradient(135deg, #00e5ff, #7c3aed);
-    color: #0a0e1a;
+    background: linear-gradient(135deg, #4299e1, #667eea);
+    color: #ffffff;
     border: none;
     border-radius: 8px;
-    padding: 0.75rem 2rem;
+    padding: 0.875rem 2rem;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     transition: all 0.3s ease;
     width: 100%;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
 }
 
 .stButton > button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+    box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
 }
 
-/* Dataframe Styling */
-.dataframe {
-    background: #151a2b;
-    border-radius: 12px;
-    overflow: hidden;
+/* Metrics Styling */
+[data-testid="stMetricValue"] {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
 }
 
-/* Plotly Chart Background */
-.js-plotly-plot {
-    background: transparent !important;
+[data-testid="stMetricLabel"] {
+    color: #cbd5e0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+[data-testid="stMetricDelta"] {
+    font-weight: 600;
 }
 
 /* Info/Warning/Success Boxes */
 .stAlert {
-    background: #151a2b;
-    border-left: 4px solid #00e5ff;
-    border-radius: 8px;
-    color: #cbd5e1;
+    background: rgba(66, 153, 225, 0.15) !important;
+    border: 1px solid #4299e1 !important;
+    border-left: 4px solid #4299e1 !important;
+    border-radius: 8px !important;
+    color: #e2e8f0 !important;
+    padding: 1rem 1.25rem !important;
 }
 
-/* Metrics */
-.css-1xarl3l {
-    background: linear-gradient(135deg, #151a2b 0%, #1a2032 100%);
+.stAlert [data-testid="stMarkdownContainer"] p {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Tables and Dataframes */
+.dataframe {
+    background: #1a202c !important;
+    color: #ffffff !important;
+}
+
+.dataframe th {
+    background: #2d3748 !important;
+    color: #cbd5e0 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.dataframe td {
+    color: #e2e8f0 !important;
+    border-bottom: 1px solid #4a5568 !important;
+}
+
+/* Customer ID Display */
+.customer-id {
+    font-family: 'JetBrains Mono', monospace;
+    color: #4299e1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    background: rgba(66, 153, 225, 0.15);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-block;
+    border: 1px solid #4299e1;
+}
+
+/* Result Display */
+.result-box {
+    background: #1a202c;
+    border: 1px solid #4a5568;
     border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid #1e293b;
+    padding: 2rem;
+    text-align: center;
+}
+
+.result-probability {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(66, 153, 225, 0.5);
+    margin: 1.5rem 0;
+}
+
+.result-label {
+    color: #a0aec0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Financial Box */
+.financial-box {
+    background: linear-gradient(135deg, rgba(237, 137, 54, 0.1) 0%, rgba(237, 137, 54, 0.05) 100%);
+    border: 1px solid rgba(237, 137, 54, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.financial-box h3 {
+    color: #ed8936;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+}
+
+.financial-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(237, 137, 54, 0.2);
+    color: #e2e8f0;
+    font-size: 0.95rem;
+}
+
+.financial-item:last-child {
+    border-bottom: none;
+}
+
+.financial-value {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 1.25rem;
 }
 
 /* Tabs */
@@ -319,110 +443,60 @@ footer {visibility: hidden;}
 }
 
 .stTabs [data-baseweb="tab"] {
-    background: #151a2b;
+    background: #2d3748;
     border-radius: 8px;
-    color: #94a3b8;
+    color: #cbd5e0;
     padding: 0.75rem 1.5rem;
-    border: 1px solid #1e293b;
+    border: 1px solid #4a5568;
+    font-weight: 600;
 }
 
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, #00e5ff, #7c3aed);
-    color: #0a0e1a;
+    background: linear-gradient(135deg, #4299e1, #667eea);
+    color: #ffffff;
     border: none;
 }
 
-/* Custom Status Dot */
-.status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #10b981;
-    display: inline-block;
-    margin-right: 0.5rem;
-    animation: pulse 2s infinite;
+/* Slider */
+.stSlider > div > div > div {
+    background: #4299e1;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #718096;
 }
 
-/* Card Container */
-.card {
-    background: linear-gradient(135deg, #151a2b 0%, #1a2032 100%);
-    border: 1px solid #1e293b;
-    border-radius: 16px;
-    padding: 2rem;
-    margin: 1rem 0;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    border-color: #00e5ff;
-    box-shadow: 0 15px 50px rgba(0, 229, 255, 0.15);
-}
-
-/* Customer ID Display */
-.customer-id {
-    font-family: 'Courier New', monospace;
-    color: #00e5ff;
-    font-weight: 600;
-    font-size: 1.1rem;
-    background: rgba(0, 229, 255, 0.1);
-    padding: 0.25rem 0.75rem;
-    border-radius: 6px;
-    display: inline-block;
-}
-
-/* Financial Impact Box */
-.financial-box {
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin: 1rem 0;
-}
-
-.financial-box h3 {
-    color: #ef4444;
-    font-family: 'Syne', sans-serif;
+.empty-state-icon {
+    font-size: 4rem;
     margin-bottom: 1rem;
+    opacity: 0.5;
 }
 
-.financial-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(239, 68, 68, 0.2);
-    color: #cbd5e1;
+.empty-state-text {
+    font-size: 1.1rem;
+    color: #a0aec0;
+    font-weight: 500;
 }
 
-.financial-item:last-child {
-    border-bottom: none;
-}
-
-.financial-value {
-    font-family: 'Syne', sans-serif;
+/* Navigation Section Title */
+.nav-section {
+    color: #718096;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     font-weight: 700;
-    color: #f1f5f9;
-    font-size: 1.2rem;
+    margin: 1.5rem 0 0.75rem 0;
+    padding: 0 1.25rem;
 }
 
-/* Loading Animation */
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #1e293b;
-    border-top-color: #00e5ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
+/* Divider */
+hr {
+    border: none;
+    border-top: 1px solid #4a5568;
+    margin: 2rem 0;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -486,7 +560,7 @@ def load_customer_data(limit=1000):
 
 @st.cache_data(ttl=60)
 def get_high_risk_customers(threshold=0.7, limit=20):
-    """Get high-risk customers (simulated for now)"""
+    """Get high-risk customers"""
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         df = pd.read_sql(f"""
@@ -535,22 +609,23 @@ def get_customer_by_id(customer_id):
 # =========================
 def main():
     # Header
-    st.markdown('<div class="main-header">ChurnGuard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Keystone Data Solutions • Predictive Analytics Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">ChurnGuard Analytics</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtitle">Keystone Data Solutions • Enterprise Platform</div>', unsafe_allow_html=True)
     
     # Sidebar
-    st.sidebar.markdown("### 🎯 Navigation")
-    st.sidebar.markdown('<div class="status-dot"></div><span style="color: #10b981; font-weight: 600;">System Online</span>', unsafe_allow_html=True)
-    st.sidebar.markdown("---")
+    st.sidebar.markdown('<div class="nav-section">System Status</div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="status-indicator"><span class="status-dot"></span>Online</div>', unsafe_allow_html=True)
+    
+    st.sidebar.markdown('<div class="nav-section">Navigation</div>', unsafe_allow_html=True)
     
     page = st.sidebar.radio(
         "",
         [
-            "📊 Executive Dashboard",
-            "🔮 Customer Prediction",
-            "🚨 High-Risk Customers",
-            "📈 Analytics & Insights",
-            "⚙️ System Status"
+            "Executive Dashboard",
+            "Customer Prediction",
+            "High-Risk Customers",
+            "Analytics & Insights",
+            "System Status"
         ],
         label_visibility="collapsed"
     )
@@ -559,15 +634,15 @@ def main():
     stats = get_stats()
 
     # Route to pages
-    if page == "📊 Executive Dashboard":
+    if page == "Executive Dashboard":
         show_overview(stats)
-    elif page == "🔮 Customer Prediction":
+    elif page == "Customer Prediction":
         show_customer_prediction()
-    elif page == "🚨 High-Risk Customers":
+    elif page == "High-Risk Customers":
         show_high_risk_customers()
-    elif page == "📈 Analytics & Insights":
+    elif page == "Analytics & Insights":
         show_analytics()
-    elif page == "⚙️ System Status":
+    elif page == "System Status":
         show_system_status()
 
 # =========================
@@ -593,7 +668,7 @@ def show_overview(stats):
         <div class="kpi-card kpi-green" style="animation-delay: 0.1s;">
             <div class="kpi-title">Total Customers</div>
             <div class="kpi-value">{stats['total']:,}</div>
-            <div class="kpi-change positive">✓ Active Database</div>
+            <div class="kpi-subtitle">Active accounts</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -602,7 +677,7 @@ def show_overview(stats):
         <div class="kpi-card kpi-red" style="animation-delay: 0.2s;">
             <div class="kpi-title">Churned</div>
             <div class="kpi-value">{stats['churned']:,}</div>
-            <div class="kpi-change negative">⚠️ Requires Attention</div>
+            <div class="kpi-subtitle">Lost customers</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -611,7 +686,7 @@ def show_overview(stats):
         <div class="kpi-card kpi-green" style="animation-delay: 0.3s;">
             <div class="kpi-title">Retained</div>
             <div class="kpi-value">{stats['retained']:,}</div>
-            <div class="kpi-change positive">✓ Stable</div>
+            <div class="kpi-subtitle">Active retention</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -624,7 +699,7 @@ def show_overview(stats):
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
     # Main content grid
     col1, col2 = st.columns([1.5, 1])
@@ -632,33 +707,35 @@ def show_overview(stats):
     with col1:
         st.markdown('<div class="section-header">Customer Distribution</div>', unsafe_allow_html=True)
         
-        # Create donut chart
+        # Create donut chart with better colors
         fig = go.Figure(data=[go.Pie(
             labels=['Retained', 'Churned'],
             values=[stats['retained'], stats['churned']],
-            hole=0.6,
+            hole=0.5,
             marker=dict(
-                colors=['#10b981', '#ef4444'],
-                line=dict(color='#0a0e1a', width=2)
+                colors=['#48bb78', '#f56565'],
+                line=dict(color='#1a202c', width=3)
             ),
-            textfont=dict(size=16, color='#f1f5f9', family='DM Sans'),
+            textfont=dict(size=18, color='#ffffff', family='Inter'),
+            textposition='outside',
             hovertemplate='<b>%{label}</b><br>Count: %{value:,}<br>Percentage: %{percent}<extra></extra>'
         )])
         
         fig.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#f1f5f9', family='DM Sans'),
+            font=dict(color='#ffffff', family='Inter'),
             showlegend=True,
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
-                y=-0.2,
+                y=-0.15,
                 xanchor="center",
                 x=0.5,
                 font=dict(size=14)
             ),
-            height=400
+            height=450,
+            margin=dict(t=40, b=40, l=40, r=40)
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -671,30 +748,30 @@ def show_overview(stats):
         
         st.markdown(f"""
         <div class="financial-box">
+            <h3>Revenue Analysis</h3>
             <div class="financial-item">
                 <span>Annual Revenue Lost</span>
-                <span class="financial-value">${annual_loss:,.2f}</span>
+                <span class="financial-value">${annual_loss:,.0f}</span>
             </div>
             <div class="financial-item">
                 <span>Customers Lost</span>
                 <span class="financial-value">{stats['churned']:,}</span>
             </div>
             <div class="financial-item">
-                <span>Avg. Customer Value</span>
-                <span class="financial-value">${avg_revenue * 12:,.2f}/yr</span>
+                <span>Avg Customer Value</span>
+                <span class="financial-value">${avg_revenue * 12:,.0f}/yr</span>
             </div>
             <div class="financial-item">
-                <span style="color: #10b981;">15% Reduction Upside</span>
-                <span class="financial-value" style="color: #10b981;">${annual_loss * 0.15:,.2f}</span>
+                <span style="color: #48bb78;">15% Reduction Potential</span>
+                <span class="financial-value" style="color: #48bb78;">${annual_loss * 0.15:,.0f}</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown("---")
-        st.info("💡 **Strategic Insight**: Reducing churn by 15% could save over ${:,.0f} annually".format(annual_loss * 0.15))
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # Quick Stats Row
-    st.markdown('<div class="section-header">Quick Insights</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Performance Metrics</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
@@ -702,16 +779,14 @@ def show_overview(stats):
         st.metric(
             label="Model Accuracy",
             value="94.2%",
-            delta="2.3% improvement",
-            delta_color="normal"
+            delta="2.3% improvement"
         )
     
     with col2:
         st.metric(
             label="Predictions Today",
             value="1,247",
-            delta="156 vs yesterday",
-            delta_color="normal"
+            delta="156 vs yesterday"
         )
     
     with col3:
@@ -732,23 +807,23 @@ def show_customer_prediction():
     
     with col1:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 🔮 Predict Churn Risk")
+        st.markdown("### Prediction Input")
         
         customer_id = st.text_input(
             "Customer ID",
-            placeholder="e.g., 7590-VHVEG",
+            placeholder="Enter customer ID (e.g., 7590-VHVEG)",
             help="Enter the customer ID to predict churn probability"
         )
         
-        if st.button("🚀 Generate Prediction", use_container_width=True):
+        if st.button("Generate Prediction", use_container_width=True):
             if customer_id:
                 with st.spinner("Analyzing customer data..."):
-                    time.sleep(1)  # Simulate processing
+                    time.sleep(1)
                     
                     customer = get_customer_by_id(customer_id)
                     
                     if customer:
-                        # Simulate prediction (replace with actual model)
+                        # Simulate prediction
                         import random
                         churn_prob = random.uniform(0.15, 0.95)
                         
@@ -770,43 +845,51 @@ def show_customer_prediction():
                             'customer': customer
                         }
                     else:
-                        st.error(f"❌ Customer ID '{customer_id}' not found in database")
+                        st.error(f"Customer ID '{customer_id}' not found in database")
             else:
-                st.warning("⚠️ Please enter a customer ID")
+                st.warning("Please enter a customer ID")
         
         st.markdown('</div>', unsafe_allow_html=True)
         
-        st.markdown("---")
-        st.info("💡 **Tip**: Try customer IDs like '7590-VHVEG', '5575-GNVDE', or '3668-QPYBK'")
+        st.info("Tip: Try customer IDs like '7590-VHVEG', '5575-GNVDE', or '3668-QPYBK'")
     
     with col2:
         if 'prediction' in st.session_state:
             pred = st.session_state['prediction']
             
+            # Display result in a cleaner way
             st.markdown(f"""
             <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 style="color: #f1f5f9; margin: 0;">Prediction Result</h3>
-                    <span class="badge {pred['badge_class']}">{pred['risk_level']} RISK</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="margin: 0;">Prediction Result</h3>
+                    <span class="badge {pred['badge_class']}">{pred['risk_level']} Risk</span>
                 </div>
-                
-                <div style="text-align: center; margin: 2rem 0;">
-                    <div style="font-size: 4rem; font-weight: 700; color: #00e5ff; font-family: 'Syne', sans-serif;">
-                        {pred['probability']:.1%}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Display probability in streamlit metric for better rendering
+            st.markdown('<div class="result-box">', unsafe_allow_html=True)
+            col_a, col_b, col_c = st.columns([1, 2, 1])
+            with col_b:
+                st.markdown(f"""
+                <div style="text-align: center;">
+                    <div class="result-probability">{pred['probability']:.1%}</div>
+                    <div class="result-label">Churn Probability</div>
+                </div>
+                """, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Customer info
+            st.markdown(f"""
+            <div style="background: #1a202c; padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; border: 1px solid #4a5568;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <div style="color: #a0aec0; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">Customer ID</div>
+                        <div class="customer-id">{pred['customer_id']}</div>
                     </div>
-                    <div style="color: #94a3b8; margin-top: 0.5rem;">Churn Probability</div>
-                </div>
-                
-                <div style="background: #0a0e1a; padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.25rem;">Customer ID</div>
-                            <div class="customer-id">{pred['customer_id']}</div>
-                        </div>
-                        <div>
-                            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.25rem;">Prediction</div>
-                            <div style="color: #f1f5f9; font-weight: 600;">{'Will Churn' if pred['probability'] > 0.5 else 'Will Stay'}</div>
-                        </div>
+                    <div>
+                        <div style="color: #a0aec0; font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 600;">Prediction</div>
+                        <div style="color: #ffffff; font-weight: 700; font-size: 1.1rem;">{'Will Churn' if pred['probability'] > 0.5 else 'Will Stay'}</div>
                     </div>
                 </div>
             </div>
@@ -815,7 +898,7 @@ def show_customer_prediction():
             # Customer details
             if pred['customer']:
                 st.markdown('<div class="card" style="margin-top: 1rem;">', unsafe_allow_html=True)
-                st.markdown("### 👤 Customer Profile")
+                st.markdown("### Customer Profile")
                 
                 cust = pred['customer']
                 
@@ -830,10 +913,9 @@ def show_customer_prediction():
                 st.markdown('</div>', unsafe_allow_html=True)
         else:
             st.markdown("""
-            <div class="card" style="text-align: center; padding: 4rem 2rem;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">🔮</div>
-                <h3 style="color: #94a3b8; font-weight: 500;">Enter a Customer ID to get started</h3>
-                <p style="color: #64748b; margin-top: 0.5rem;">The prediction will appear here</p>
+            <div class="empty-state">
+                <div class="empty-state-icon">📊</div>
+                <div class="empty-state-text">Enter a Customer ID to generate prediction</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -849,7 +931,7 @@ def show_high_risk_customers():
         limit = st.slider("Number of customers to display", 5, 50, 20)
     
     with col2:
-        if st.button("🔄 Refresh Data", use_container_width=True):
+        if st.button("Refresh Data", use_container_width=True):
             st.cache_data.clear()
             st.rerun()
     
@@ -864,7 +946,7 @@ def show_high_risk_customers():
         with col2:
             st.metric("Medium Risk", len(df[df['risk_level'] == 'MEDIUM']))
         with col3:
-            st.metric("Avg Risk Score", f"{df['risk_probability'].mean():.1%}")
+            st.metric("Average Risk Score", f"{df['risk_probability'].mean():.1%}")
         
         st.markdown("<br>", unsafe_allow_html=True)
         
@@ -873,18 +955,15 @@ def show_high_risk_customers():
         display_df['risk_probability'] = display_df['risk_probability'].apply(lambda x: f"{x:.1%}")
         display_df['monthly_charges'] = display_df['monthly_charges'].apply(lambda x: f"${x:.2f}")
         
-        display_df.columns = ['Customer ID', 'Risk Level', 'Probability', 'Tenure', 'Contract', 'Monthly Charges']
+        display_df.columns = ['Customer ID', 'Risk Level', 'Probability', 'Tenure (months)', 'Contract', 'Monthly Charges']
         
-        # Style the dataframe
-        def highlight_risk(row):
-            if row['Risk Level'] == 'HIGH':
-                return ['background-color: rgba(239, 68, 68, 0.1)'] * len(row)
-            elif row['Risk Level'] == 'MEDIUM':
-                return ['background-color: rgba(245, 158, 11, 0.1)'] * len(row)
-            return [''] * len(row)
-        
-        styled_df = display_df.style.apply(highlight_risk, axis=1)
-        st.dataframe(styled_df, use_container_width=True, height=600)
+        # Display with styling
+        st.dataframe(
+            display_df,
+            use_container_width=True,
+            height=600,
+            hide_index=True
+        )
         
     else:
         st.warning("No high-risk customers found or unable to connect to database")
@@ -902,7 +981,8 @@ def show_analytics():
         return
     
     # Churn by Contract Type
-    st.markdown("### 📊 Churn Rate by Contract Type")
+    st.markdown("### Churn Rate by Contract Type")
+    
     churn_by_contract = df.groupby('contract')['churn'].apply(
         lambda x: (x == 'Yes').mean() * 100
     ).reset_index()
@@ -913,7 +993,7 @@ def show_analytics():
         x='Contract Type',
         y='Churn Rate (%)',
         color='Churn Rate (%)',
-        color_continuous_scale=['#10b981', '#f59e0b', '#ef4444'],
+        color_continuous_scale=['#48bb78', '#ed8936', '#f56565'],
         text='Churn Rate (%)'
     )
     
@@ -921,63 +1001,71 @@ def show_analytics():
     fig1.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#f1f5f9', family='DM Sans'),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=True, gridcolor='#1e293b'),
-        height=400
+        font=dict(color='#ffffff', family='Inter'),
+        xaxis=dict(showgrid=False, title_font=dict(size=14)),
+        yaxis=dict(showgrid=True, gridcolor='#4a5568', title_font=dict(size=14)),
+        height=450,
+        margin=dict(t=40, b=40, l=40, r=40)
     )
     
     st.plotly_chart(fig1, use_container_width=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
     with col1:
         # Churn by Tenure
-        st.markdown("### 📈 Churn vs Tenure")
+        st.markdown("### Churn Distribution by Tenure")
         
         df_sample = df.sample(min(500, len(df)))
-        df_sample['churn_binary'] = (df_sample['churn'] == 'Yes').astype(int)
         
         fig2 = px.scatter(
             df_sample,
             x='tenure',
             y='monthly_charges',
             color='churn',
-            color_discrete_map={'Yes': '#ef4444', 'No': '#10b981'},
-            opacity=0.6,
-            labels={'tenure': 'Tenure (months)', 'monthly_charges': 'Monthly Charges ($)'}
+            color_discrete_map={'Yes': '#f56565', 'No': '#48bb78'},
+            opacity=0.7,
+            labels={'tenure': 'Tenure (months)', 'monthly_charges': 'Monthly Charges ($)', 'churn': 'Status'}
         )
         
         fig2.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#f1f5f9', family='DM Sans'),
-            xaxis=dict(showgrid=True, gridcolor='#1e293b'),
-            yaxis=dict(showgrid=True, gridcolor='#1e293b'),
-            height=400
+            font=dict(color='#ffffff', family='Inter'),
+            xaxis=dict(showgrid=True, gridcolor='#4a5568'),
+            yaxis=dict(showgrid=True, gridcolor='#4a5568'),
+            height=400,
+            legend=dict(title_text='')
         )
         
         st.plotly_chart(fig2, use_container_width=True)
     
     with col2:
-        # Churn Distribution
-        st.markdown("### 🥧 Overall Churn Distribution")
+        # Churn Distribution Pie
+        st.markdown("### Overall Churn Distribution")
         
         churn_counts = df['churn'].value_counts()
         
         fig3 = go.Figure(data=[go.Pie(
             labels=['Retained', 'Churned'],
             values=[churn_counts.get('No', 0), churn_counts.get('Yes', 0)],
-            marker=dict(colors=['#10b981', '#ef4444']),
-            textfont=dict(size=16, color='#f1f5f9')
+            marker=dict(
+                colors=['#48bb78', '#f56565'],
+                line=dict(color='#1a202c', width=3)
+            ),
+            textfont=dict(size=18, color='#ffffff', family='Inter'),
+            textposition='inside'
         )])
         
         fig3.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#f1f5f9', family='DM Sans'),
+            font=dict(color='#ffffff', family='Inter'),
             showlegend=True,
-            height=400
+            height=400,
+            legend=dict(orientation="h", yanchor="bottom", y=-0.15, xanchor="center", x=0.5)
         )
         
         st.plotly_chart(fig3, use_container_width=True)
@@ -993,40 +1081,40 @@ def show_system_status():
     with col1:
         st.markdown("""
         <div class="card">
-            <h3 style="color: #10b981;">✓ Database</h3>
-            <p style="color: #94a3b8;">PostgreSQL connected</p>
-            <p style="color: #64748b; font-size: 0.9rem;">Port: 5432</p>
+            <h3 style="color: #48bb78;">Database</h3>
+            <p style="color: #cbd5e0; margin: 0.5rem 0;">PostgreSQL Connected</p>
+            <p style="color: #718096; font-size: 0.9rem; margin: 0;">Port: 5432</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
         <div class="card">
-            <h3 style="color: #10b981;">✓ API Server</h3>
-            <p style="color: #94a3b8;">FastAPI running</p>
-            <p style="color: #64748b; font-size: 0.9rem;">Port: 8000</p>
+            <h3 style="color: #48bb78;">API Server</h3>
+            <p style="color: #cbd5e0; margin: 0.5rem 0;">FastAPI Running</p>
+            <p style="color: #718096; font-size: 0.9rem; margin: 0;">Port: 8000</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
         <div class="card">
-            <h3 style="color: #f59e0b;">⚠ ML Model</h3>
-            <p style="color: #94a3b8;">Training required</p>
-            <p style="color: #64748b; font-size: 0.9rem;">Accuracy: 94.2%</p>
+            <h3 style="color: #ed8936;">ML Model</h3>
+            <p style="color: #cbd5e0; margin: 0.5rem 0;">Training Required</p>
+            <p style="color: #718096; font-size: 0.9rem; margin: 0;">Accuracy: 94.2%</p>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
     # System Info
-    st.markdown("### 📊 System Information")
+    st.markdown("### System Information")
     
     stats = get_stats()
     
     info_data = {
         'Component': ['Dashboard', 'Database', 'API Server', 'Docker Services', 'Model Version'],
-        'Status': ['🟢 Online', '🟢 Connected', '🟢 Running', '🟢 Active', '🟡 v1.0'],
+        'Status': ['Online', 'Connected', 'Running', 'Active', 'v1.0'],
         'Details': [
             'Streamlit 1.28.0',
             f'{stats["total"]:,} customers',
@@ -1038,8 +1126,7 @@ def show_system_status():
     
     st.table(pd.DataFrame(info_data))
     
-    st.markdown("---")
-    st.success("✓ All systems operational")
+    st.success("All systems operational")
 
 # =========================
 # Footer
@@ -1047,9 +1134,9 @@ def show_system_status():
 def show_footer():
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; color: #64748b; padding: 2rem 0; font-size: 0.9rem;">
-        <p><strong style="color: #00e5ff;">Keystone Data Solutions</strong> | ChurnGuard Analytics Platform</p>
-        <p style="margin-top: 0.5rem;">© 2025 Empowering businesses through predictive analytics</p>
+    <div style="text-align: center; color: #718096; padding: 2rem 0;">
+        <p style="font-weight: 600; color: #cbd5e0;">Keystone Data Solutions</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">ChurnGuard Analytics Platform © 2025</p>
     </div>
     """, unsafe_allow_html=True)
 
