@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnGuard Analytics | Keystone Data Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --bg-card: #151a2b;
+            --bg-card-hover: #1a2032;
+            --accent-primary: #00e5ff;
+            --accent-secondary: #7c3aed;
+            --accent-danger: #ef4444;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #1e293b;
+            --glow-primary: rgba(0, 229, 255, 0.3);
+            --glow-danger: rgba(239, 68, 68, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 229, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(21, 26, 43, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: -5px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            color: var(--text-primary);
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stat-change.positive { color: var(--accent-success); }
+        .stat-change.negative { color: var(--accent-danger); }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(0, 229, 255, 0.08);
+        }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--accent-primary);
+        }
+
+        /* Prediction Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--glow-primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow-primary);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--bg-dark);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        /* Result Display */
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .risk-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .risk-badge.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-danger);
+            border: 1px solid var(--accent-danger);
+        }
+
+        .risk-badge.medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-warning);
+            border: 1px solid var(--accent-warning);
+        }
+
+        .risk-badge.low {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+            border: 1px solid var(--accent-success);
+        }
+
+        .probability-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .probability-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .probability-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* High Risk Table */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg-dark);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .customer-id {
+            font-family: 'Courier New', monospace;
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* Error Message */
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-danger);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--accent-danger);
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        /* Settings Icon */
+        .settings-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 26, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        .footer-brand {
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <div class="logo">ChurnGuard</div>
+                <div class="subtitle">Keystone Data Solutions</div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span style="font-size: 0.9rem;">System Online</span>
+                </div>
+                <button class="settings-btn" onclick="openSettings()">⚙️ API Settings</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Customers</div>
+                <div class="stat-value" id="totalCustomers">---</div>
+                <div class="stat-change positive" id="totalChange">
+                    <span>Loading...</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Churn Rate</div>
+                <div class="stat-value" id="churnRate">---%</div>
+                <div class="stat-change" id="churnChange">
+                    <span>Loading...</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">High Risk</div>
+                <div class="stat-value" id="highRiskCount">---</div>
+                <div class="stat-change negative">
+                    <span>⚠️ Requires attention</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Model Accuracy</div>
+                <div class="stat-value">94.2%</div>
+                <div class="stat-change positive">
+                    <span>✓ Excellent</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Prediction Card -->
+            <div class="card">
+                <h2 class="card-title">
+                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Churn Prediction
+                </h2>
+                <form id="predictionForm">
+                    <div class="form-group">
+                        <label class="form-label">Customer ID</label>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            id="customerId" 
+                            placeholder="e.g., 7590-VHVEG" 
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn" id="predictBtn">
+                        🔮 Predict Churn
+                    </button>
+                </form>
+
+                <div class="error" id="errorMsg"></div>
+
+                <div class="result" id="result">
+                    <div class="result-header">
+                        <h3>Prediction Result</h3>
+                        <span class="risk-badge" id="riskBadge">HIGH RISK</span>
+                    </div>
+                    <div class="probability-display">
+                        <div class="probability-circle">
+                            <svg width="150" height="150" style="transform: rotate(-90deg)">
+                                <circle cx="75" cy="75" r="60" stroke="#1e293b" stroke-width="10" fill="none"/>
+                                <circle id="progressCircle" cx="75" cy="75" r="60" stroke="url(#gradient)" stroke-width="10" fill="none" stroke-dasharray="377" stroke-dashoffset="377" style="transition: stroke-dashoffset 1s ease"/>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="probability-value" id="probabilityValue">0%</div>
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">Churn Probability</div>
+                    </div>
+                    <div style="padding: 1rem; background: var(--bg-card); border-radius: 8px; margin-top: 1rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+                            <div>
+                                <div style="color: var(--text-secondary); margin-bottom: 0.3rem;">Customer ID</div>
+                                <div class="customer-id" id="resultCustomerId">---</div>
+                            </div>
+                            <div>
+                                <div style="color: var(--text-secondary); margin-bottom: 0.3rem;">Prediction</div>
+                                <div id="resultPrediction">---</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- High Risk Customers -->
+            <div class="card">
+                <h2 class="card-title">
+                    <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    High Risk Customers
+                </h2>
+                <div class="table-container">
+                    <table id="highRiskTable">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Risk</th>
+                                <th>Probability</th>
+                            </tr>
+                        </thead>
+                        <tbody id="highRiskBody">
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                                    <div class="spinner"></div>
+                                    <div style="margin-top: 1rem;">Loading high-risk customers...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">API Configuration</h2>
+                <button class="close-btn" onclick="closeSettings()">×</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">API Base URL</label>
+                <input 
+                    type="text" 
+                    class="form-input" 
+                    id="apiUrl" 
+                    value="http://localhost:8000"
+                    placeholder="http://localhost:8000"
+                >
+            </div>
+            <div class="form-group">
+                <label class="form-label">JWT Token (Optional)</label>
+                <input 
+                    type="password" 
+                    class="form-input" 
+                    id="jwtToken" 
+                    placeholder="Leave empty if auth disabled"
+                >
+            </div>
+            <button class="btn" onclick="saveSettings()">💾 Save Settings</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 <span class="footer-brand">Keystone Data Solutions</span> | ChurnGuard Analytics Platform</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">Empowering businesses through predictive analytics and big data solutions.</p>
+    </footer>
+
+    <script>
+        // Configuration
+        let API_URL = localStorage.getItem('apiUrl') || 'http://localhost:8000';
+        let JWT_TOKEN = localStorage.getItem('jwtToken') || '';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadHighRiskCustomers();
+            document.getElementById('apiUrl').value = API_URL;
+            document.getElementById('jwtToken').value = JWT_TOKEN;
+        });
+
+        // API Request Helper
+        async function apiRequest(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+
+            if (JWT_TOKEN) {
+                headers['Authorization'] = `Bearer ${JWT_TOKEN}`;
+            }
+
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                ...options,
+                headers
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail || 'API request failed');
+            }
+
+            return await response.json();
+        }
+
+        // Load Statistics
+        async function loadStats() {
+            try {
+                const stats = await apiRequest('/stats');
+                
+                document.getElementById('totalCustomers').textContent = stats.total_customers.toLocaleString();
+                document.getElementById('churnRate').textContent = (stats.churn_rate * 100).toFixed(1) + '%';
+                
+                const churnChangeEl = document.getElementById('churnChange');
+                if (stats.churn_rate > 0.3) {
+                    churnChangeEl.className = 'stat-change negative';
+                    churnChangeEl.innerHTML = '<span>⚠️ Above target</span>';
+                } else {
+                    churnChangeEl.className = 'stat-change positive';
+                    churnChangeEl.innerHTML = '<span>✓ Below target</span>';
+                }
+
+                document.getElementById('totalChange').innerHTML = '<span>✓ Active</span>';
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+                showError('Failed to connect to API. Check settings.');
+            }
+        }
+
+        // Load High Risk Customers
+        async function loadHighRiskCustomers() {
+            try {
+                const customers = await apiRequest('/customers/high-risk?limit=10');
+                
+                const tbody = document.getElementById('highRiskBody');
+                tbody.innerHTML = '';
+
+                if (customers.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                                No high-risk customers found
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById('highRiskCount').textContent = '0';
+                    return;
+                }
+
+                customers.forEach(customer => {
+                    const row = document.createElement('tr');
+                    const probability = (customer.churn_probability * 100).toFixed(1);
+                    
+                    row.innerHTML = `
+                        <td><span class="customer-id">${customer.customer_id}</span></td>
+                        <td><span class="risk-badge ${customer.risk_level.toLowerCase()}">${customer.risk_level}</span></td>
+                        <td><strong>${probability}%</strong></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                document.getElementById('highRiskCount').textContent = customers.length;
+            } catch (error) {
+                console.error('Failed to load high-risk customers:', error);
+                const tbody = document.getElementById('highRiskBody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 2rem; color: var(--accent-danger);">
+                            Failed to load data. Check API connection.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Prediction Form Handler
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const customerId = document.getElementById('customerId').value.trim();
+            const btn = document.getElementById('predictBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            const result = document.getElementById('result');
+
+            // Reset
+            errorMsg.classList.remove('show');
+            result.classList.remove('show');
+            btn.disabled = true;
+            btn.classList.add('btn-loading');
+            btn.textContent = 'Predicting...';
+
+            try {
+                const prediction = await apiRequest(`/predict/${customerId}`);
+                
+                // Update result
+                document.getElementById('resultCustomerId').textContent = prediction.customer_id;
+                document.getElementById('resultPrediction').textContent = prediction.prediction === 1 ? 'Will Churn' : 'Will Stay';
+                
+                const probability = (prediction.churn_probability * 100).toFixed(1);
+                document.getElementById('probabilityValue').textContent = probability + '%';
+                
+                // Update risk badge
+                const badge = document.getElementById('riskBadge');
+                badge.textContent = prediction.risk_level;
+                badge.className = `risk-badge ${prediction.risk_level.toLowerCase()}`;
+                
+                // Animate circle
+                const circumference = 377;
+                const offset = circumference - (prediction.churn_probability * circumference);
+                document.getElementById('progressCircle').style.strokeDashoffset = offset;
+                
+                // Show result
+                result.classList.add('show');
+
+            } catch (error) {
+                errorMsg.textContent = error.message;
+                errorMsg.classList.add('show');
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('btn-loading');
+                btn.textContent = '🔮 Predict Churn';
+            }
+        });
+
+        // Settings Modal
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        function saveSettings() {
+            API_URL = document.getElementById('apiUrl').value.trim();
+            JWT_TOKEN = document.getElementById('jwtToken').value.trim();
+            
+            localStorage.setItem('apiUrl', API_URL);
+            localStorage.setItem('jwtToken', JWT_TOKEN);
+            
+            closeSettings();
+            
+            // Reload data
+            loadStats();
+            loadHighRiskCustomers();
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.textContent = message;
+            errorMsg.classList.add('show');
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            loadStats();
+            loadHighRiskCustomers();
+        }, 30000);
+    </script>
+</body>
+</html>
