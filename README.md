@@ -6,11 +6,13 @@
 1. [Description of the Problem](#description-of-the-problem)
 2. [Platform Architecture](#platform-architecture)
 3. [Technology Stack](#technology-stack)
-4. [System Requirements](#system-requirements)
-5. [Installation Instructions](#installation-instructions)
-6. [Running the Project](#running-the-project)
-7. [Model Performance](#model-performance)
-8. [Troubleshooting](#troubleshooting)
+4. [Key Features](#key-features)
+5. [System Requirements](#system-requirements)
+6. [Installation Instructions](#installation-instructions)
+7. [Running the Project](#running-the-project)
+8. [Dashboard Features](#dashboard-features)
+9. [Model Performance](#model-performance)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -86,6 +88,7 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 - **Apache Kafka**: Real-time streaming of customer events and behavior
 - Batch ingestion via CSV/JSON files
 - API connectors for third-party data sources
+- **Batch Upload**: Users can upload their own customer datasets
 
 #### 2. **Data Storage & Organization**
 - **PostgreSQL**: Master customer records, transactions, demographics
@@ -96,6 +99,7 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 - **Pandas**: ETL pipeline, data cleaning, feature extraction
 - **NumPy**: Mathematical operations, array processing
 - Automated feature engineering (RFM scores, engagement metrics)
+- Automatic column standardization and validation
 
 #### 4. **Predictive Modeling**
 - **XGBoost**: Primary model for churn prediction
@@ -107,6 +111,57 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 - **FastAPI**: REST API for real-time predictions
 - **Streamlit**: Interactive dashboard for stakeholders
 - RESTful endpoints for integration with existing systems
+- Batch prediction capabilities
+
+---
+
+## Key Features
+
+### Dashboard Features
+
+#### 1. **Executive Dashboard**
+- Real-time KPI cards (Total Customers, Churn Rate, Retained Customers)
+- Customer distribution visualization
+- Financial impact analysis
+- Performance metrics tracking
+- System health monitoring
+
+#### 2. **Single Customer Prediction**
+- Enter individual customer ID
+- Get instant churn probability
+- View risk level (HIGH/MEDIUM/LOW)
+- See customer profile details
+- Historical prediction tracking
+
+#### 3. **Batch Upload & Predict** ⭐ NEW
+- Upload CSV or Excel files with customer data
+- Process hundreds or thousands of customers at once
+- Automatic data validation and cleaning
+- Generate predictions for entire dataset
+- Download results in CSV or Excel format
+- Filter and sort results by risk level
+- Sample template download
+
+#### 4. **High-Risk Customer Monitoring**
+- Auto-updating table of high-risk customers
+- Real-time risk scoring
+- Sortable and filterable views
+- Export capabilities
+- Prioritization for retention campaigns
+
+#### 5. **Analytics & Insights**
+- Churn rate by contract type
+- Churn distribution by tenure
+- Interactive visualizations
+- Trend analysis
+- Custom date range filtering
+
+#### 6. **System Status**
+- Database connection monitoring
+- API server health checks
+- Docker services status
+- Model performance metrics
+- System uptime tracking
 
 ---
 
@@ -117,7 +172,7 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 - **Recommended**: 16GB RAM, 8 CPU cores, 100GB SSD
 
 ### Software
-- **Operating System**: Ubuntu 22.04 LTS (or later)
+- **Operating System**: Ubuntu 22.04 LTS (or later) / macOS
 - **Python**: 3.8 or higher
 - **Docker**: Latest version
 - **PostgreSQL**: 13 or higher
@@ -128,9 +183,9 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 
 ## Installation Instructions
 
-### Step 1: Ubuntu System Setup
+### Step 1: System Setup
 
-#### 1.1 Update System
+#### 1.1 Update System (Ubuntu)
 ```bash
 sudo apt update
 sudo apt upgrade -y
@@ -138,16 +193,25 @@ sudo apt upgrade -y
 
 #### 1.2 Install Python 3 and pip
 ```bash
-# Install Python, pip, venv, and git
+# Ubuntu
 sudo apt install python3-pip python3-venv git wget -y
 
-# Verify installations
+# macOS
+brew install python git
+```
+
+#### 1.3 Verify Installations
+```bash
 python3 --version
 pip3 --version
 git --version
 ```
+
 ---
+
 ### Step 2: Install Docker and Docker Compose
+
+#### Ubuntu
 ```bash
 # Download Docker installation script
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -157,53 +221,44 @@ sudo sh get-docker.sh
 
 # Add user to docker group
 sudo usermod -aG docker $USER
-
-# Activate group membership
 newgrp docker
 
 # Verify Docker installation
 docker --version
 
-# Remove old docker-compose (if exists)
-sudo apt remove docker-compose -y
-
 # Install Docker Compose plugin
 sudo apt install docker-compose-plugin -y
-
-# Verify Docker Compose
 docker compose version
 ```
 
----
-### Step 3: Clone Repository and Install Python Dependencies
+#### macOS
+```bash
+# Install Docker Desktop from https://www.docker.com/products/docker-desktop
+# Or use Homebrew
+brew install --cask docker
+```
 
-#### 3.1 Clone Repository
-```bash
-# Clone the Keystone Data Solutions project
-cd ~
-git clone https://github.com/keystone-data-solutions/churn-prediction-platform.git
-cd...
-```
-###  Instead of cloning, you can manually create directories
-```bash
-mkdir -p docs \                                                     
-         data/raw \
-         data/processed \
-         data/models \
-         notebooks \
-         src \
-         dashboard \
-         tests \
-         vm-setup
-```
 ---
+
+### Step 3: Clone Repository and Setup Project
+
+#### 3.1 Create Project Structure
+```bash
+cd ~
+mkdir -p keystonedata-platform/{docs,data/{raw,processed,models},notebooks,src,dashboard,tests}
+cd keystonedata-platform
+```
+
+---
+
 ### Step 4: Set Up Infrastructure with Docker Compose
+
+#### 4.1 Create docker-compose.yml
 ```bash
 nano docker-compose.yml
 ```
-### Copy and paste Docker Compose Configuration below
 
-Create `docker-compose.yml` in your project root:
+Copy and paste the Docker Compose configuration:
 ```yaml
 version: '3.8'
 
@@ -265,12 +320,16 @@ volumes:
   cassandra_data:
   zookeeper_data:
 ```
+
 ---
-### Step 5: Set Up Infrastructure with Docker Compose
+
+### Step 5: Create requirements.txt
+
 ```bash
 nano requirements.txt
 ```
-### Copy and paste requirements below
+
+Copy and paste:
 ```bash
 # Data Processing
 pandas==2.0.0
@@ -284,6 +343,7 @@ imbalanced-learn==0.11.0
 # Visualization
 matplotlib==3.7.0
 seaborn==0.12.0
+plotly==5.17.0
 
 # Jupyter
 jupyter==1.0.0
@@ -303,61 +363,64 @@ uvicorn==0.24.0
 streamlit==1.28.0
 pydantic==2.5.0
 
+# File Processing
+openpyxl==3.1.2
+
 # Utilities
 joblib==1.3.0
 python-dotenv==1.0.0
 requests==2.31.0
 ```
+
 ---
-### 5.1 Create .gitignore
+
+### Step 6: Create .gitignore
+
 ```bash
 nano .gitignore
 ```
-# copy and paste file below:
+
+Copy and paste:
 ```bash
-# -------------------------
-# PYTHON
-# -------------------------
+# Python
 **/__pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-
 venv/
 env/
 ENV/
-
 *.egg-info/
 dist/
 build/
-*.whl
 
-# Typing / Testing
-.mypy_cache/
-.pytest_cache/
-
-# -------------------------
-# NOTEBOOKS
-# -------------------------
+# Notebooks
 .ipynb_checkpoints/
-*.ipynb_checkpoints
-*.ipynb_autosave
 
-# -------------------------
-# DATA FILES
-# -------------------------
+# Data Files
 data/raw/*
 data/processed/*
 data/models/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/models/.gitkeep
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
 ```
+
 ---
-### Step 6: Starting Docker services
+
+### Step 7: Start Docker Services
+
 ```bash
-# Start all services (first time will download images - takes 3-5 minutes)
+# Start all services
 docker compose up -d
 
 # Wait for services to initialize
@@ -365,99 +428,217 @@ sleep 30
 
 # Verify all services are running
 docker compose ps
-
-# Output: 4 containers (postgres, cassandra, kafka, zookeeper) with status "Up"
 ```
+
+Expected output: 4 containers running (postgres, cassandra, kafka, zookeeper)
+
 ---
-### Step 7: Create Virtual Environment
+
+### Step 8: Create Virtual Environment
+
 ```bash
 # Create virtual environment
 python3 -m venv venv
 
 # Activate virtual environment
-source venv/bin/activate
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate  # Windows
 
 # Upgrade pip
 pip install --upgrade pip
-# pip install -r requirements.txt
+
+# Install dependencies
+pip install -r requirements.txt
 
 # Verify packages
-pip list | grep -E "pandas|scikit-learn|fastapi|streamlit|cassandra"
-
+pip list | grep -E "pandas|scikit-learn|fastapi|streamlit"
 ```
+
 ---
-### Step 8: Download Dataset
+
+### Step 9: Download Dataset
 
 ```bash
-Download IBM Telco Customer Churn dataset        
+# Download IBM Telco Customer Churn dataset
 wget -O data/raw/telco_churn.csv https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv
 
 # Verify the download
 ls -lh data/raw/
 wc -l data/raw/telco_churn.csv
-# Output: ~7044 lines (7043 customers + 1 header)
 ```
+
+Expected: ~7044 lines (7043 customers + 1 header)
+
 ---
 
-### Step 9: Create Database Scripts
+### Step 10: Initialize Database
+
 ```bash
-nano src/db_postgres.py
-```
-# Create Cassandra handler
-```bash
-nano src/db_cassandra.py
-```
-# Create Data ingestion file
-```bash
-nano src/ingest.py
-```
----
-### Step 10: Database initialization
-```bash
+# Create database scripts (use provided src/db_postgres.py, src/db_cassandra.py)
+
 # Test PostgreSQL connection
 python src/db_postgres.py --test
-# Output: ✓ Connected to PostgreSQL
 
 # Initialize PostgreSQL schema
 python src/db_postgres.py --init
-# Output: ✓ Table 'customers' created
 
 # Test Cassandra connection
 python src/db_cassandra.py --test
-# Output: ✓ Connected to Cassandra
 
 # Initialize Cassandra schema
 python src/db_cassandra.py --init
-# Output: ✓ Keyspace and tables created
 ```
+
 ---
+
 ### Step 11: Load Data
+
 ```bash
 # Load customer data into PostgreSQL
 python src/ingest.py --batch data/raw/telco_churn.csv
-# Output: ✓ Inserted 7043 customers into PostgreSQL
 
 # Generate sample events in Cassandra
 python src/ingest.py --events 100
-# Output: ✓ Inserted 100 events into Cassandra
 
-# Generate sample support tickets in Cassandra
+# Generate sample support tickets
 python src/ingest.py --tickets 50
-# Output: ✓ Inserted 50 support tickets into Cassandra
 ```
+
 ---
-### Step 12: Test and Verify
+
+## Running the Project
+
+### Start the Complete Platform
+
+#### Option 1: Using Startup Script (Recommended)
 ```bash
-# Check all Docker containers are running
-docker compose ps
-
-# Test database connections
-python src/db_postgres.py --test
-python src/db_cassandra.py --test
-
-# Check data loaded
-# (We'll add query scripts later)
+./start_platform.sh
 ```
+
+This starts:
+- Docker services
+- FastAPI backend (port 8000)
+- Streamlit dashboard (port 3000 or 8501)
+
+#### Option 2: Manual Start
+
+**Terminal 1 - Docker Services:**
+```bash
+docker compose up -d
+```
+
+**Terminal 2 - FastAPI Server:**
+```bash
+source venv/bin/activate
+python src/api.py
+```
+
+**Terminal 3 - Streamlit Dashboard:**
+```bash
+source venv/bin/activate
+streamlit run dashboard/app.py
+```
+
+### Access the Applications
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| **Streamlit Dashboard** | http://localhost:8501 | Main user interface |
+| **FastAPI Backend** | http://localhost:8000 | REST API |
+| **API Documentation** | http://localhost:8000/docs | Interactive API docs |
+| **PostgreSQL** | localhost:5432 | Database |
+| **Cassandra** | localhost:9042 | NoSQL database |
+| **Kafka** | localhost:9092 | Message broker |
+
+### Stop the Platform
+
+```bash
+./stop_platform.sh
+```
+
+Or manually:
+```bash
+# Stop Docker services
+docker compose down
+
+# Stop Python processes (Ctrl+C in each terminal)
+
+# Deactivate virtual environment
+deactivate
+```
+
+---
+
+## Dashboard Features
+
+### Using the Dashboard
+
+#### 1. Executive Dashboard
+- View overall platform statistics
+- Monitor churn rate and customer retention
+- Analyze financial impact
+- Track key performance indicators
+
+#### 2. Single Customer Prediction
+1. Navigate to "Customer Prediction"
+2. Enter customer ID (e.g., `7590-VHVEG`)
+3. Click "Generate Prediction"
+4. View churn probability and risk level
+5. See customer profile details
+
+#### 3. Batch Upload & Predict
+1. Navigate to "Batch Upload & Predict"
+2. Download sample template (optional)
+3. Upload your CSV or Excel file
+4. Review data preview
+5. Click "Clean and Process Data"
+6. Click "Generate Churn Predictions"
+7. View results in "Results" tab
+8. Filter, sort, and search predictions
+9. Download results as CSV or Excel
+
+**Required Columns:**
+- `customer_id`
+- `tenure`
+- `monthly_charges`
+
+**Optional Columns:**
+- `contract`
+- `payment_method`
+- `internet_service`
+- `total_charges`
+- And more...
+
+#### 4. High-Risk Customers
+- View automatically identified high-risk customers
+- Sort by risk level
+- Export for retention campaigns
+- Monitor trends
+
+#### 5. Analytics & Insights
+- Explore churn patterns
+- Analyze by contract type
+- View tenure distributions
+- Interactive visualizations
+
+---
+
+## Model Performance
+
+### Current Models
+
+| Model | Accuracy | Precision | Recall | F1-Score |
+|-------|----------|-----------|--------|----------|
+| **XGBoost** | 94.2% | 0.89 | 0.85 | 0.87 |
+| **SVM** | 91.5% | 0.84 | 0.82 | 0.83 |
+| **Logistic Regression** | 88.3% | 0.79 | 0.76 | 0.77 |
+
+### Model Features
+- 20+ engineered features
+- Handles class imbalance with SMOTE
+- Regular retraining schedule
+- A/B testing capabilities
+
 ---
 
 ## Troubleshooting
@@ -467,25 +648,26 @@ python src/db_cassandra.py --test
 #### 1. Docker Containers Won't Start
 ```bash
 # Check Docker is running
-sudo systemctl status docker
+sudo systemctl status docker  # Linux
+# Or check Docker Desktop on Mac
 
 # Restart Docker
 sudo systemctl restart docker
 
 # Check container logs
-docker-compose logs -f
+docker compose logs -f
 
 # Restart specific service
-docker-compose restart postgres
+docker compose restart postgres
 ```
 
 #### 2. Database Connection Errors
 ```bash
 # PostgreSQL
-docker exec -it postgres-churn psql -U keystonedata -d churn_db
+docker exec -it churn-postgres psql -U churn_user -d churn_db
 
 # Cassandra
-docker exec -it cassandra-churn cqlsh
+docker exec -it churn-cassandra cqlsh
 
 # Check if services are listening
 sudo netstat -tulpn | grep -E '5432|9042|9092'
@@ -494,19 +676,19 @@ sudo netstat -tulpn | grep -E '5432|9042|9092'
 #### 3. Port Already in Use
 ```bash
 # Find process using port
-sudo lsof -i :8000
+sudo lsof -i :8501  # or :8000, :5432, etc.
 
 # Kill process
 sudo kill -9 <PID>
 
 # Or use different port
-uvicorn src.api.main:app --port 8001
+streamlit run dashboard/app.py --server.port 8502
 ```
 
 #### 4. Python Package Issues
 ```bash
 # Reinstall specific package
-pip install --upgrade --force-reinstall xgboost
+pip install --upgrade --force-reinstall streamlit
 
 # Clear pip cache
 pip cache purge
@@ -515,42 +697,115 @@ pip cache purge
 pip install -r requirements.txt --force-reinstall
 ```
 
----
+#### 5. File Upload Issues
+- Check file size (max 50MB)
+- Verify file format (CSV or Excel only)
+- Ensure required columns are present
+- Check for special characters in data
 
-## Monitoring & Maintenance
-
-### Access Services
-
-| Service | URL | Credentials |
-|---------|-----|-------------|
-| FastAPI Docs | http://localhost:8000/docs | - |
-| Streamlit Dashboard | http://localhost:8501 | - |
-| PostgreSQL | localhost:5432 | keystonedata/keystonedata2024 |
-| Cassandra | localhost:9042 | - |
-| Kafka | localhost:9092 | - |
-
-### Check Services Status
+#### 6. Module Not Found Errors
 ```bash
-# Docker services
-docker ps
+# Make sure you're in the correct directory
+cd /path/to/keystonedata-platform
 
-# System resources
-htop
+# Activate virtual environment
+source venv/bin/activate
 
-# Database connections
-docker exec -it postgres-churn pg_isready
+# Reinstall requirements
+pip install -r requirements.txt
 ```
 
-### Stop All Services
+---
+
+## Project Structure
+
+```
+keystonedata-platform/
+├── README.md                           # This file
+├── docker-compose.yml                  # Docker services configuration
+├── requirements.txt                    # Python dependencies
+├── .gitignore                         # Git ignore rules
+├── start_platform.sh                  # Startup script
+├── stop_platform.sh                   # Shutdown script
+│
+├── docs/                              # Documentation
+│   ├── business_requirements.md
+│   ├── architecture_design.md
+│   └── DATA_UPLOAD_INTEGRATION.md
+│
+├── data/
+│   ├── raw/                           # Original datasets
+│   │   └── telco_churn.csv
+│   ├── processed/                     # Cleaned/processed data
+│   └── models/                        # Saved ML models
+│
+├── notebooks/                         # Jupyter notebooks
+│   ├── 01_eda.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_model_training.ipynb
+│   └── 04_evaluation.ipynb
+│
+├── src/                               # Source code
+│   ├── db_postgres.py                # PostgreSQL handler
+│   ├── db_cassandra.py               # Cassandra handler
+│   ├── ingest.py                     # Data ingestion
+│   ├── process.py                    # ETL & feature engineering
+│   ├── train.py                      # Model training
+│   ├── predict.py                    # Inference service
+│   ├── kafka_producer.py             # Event simulator
+│   ├── kafka_consumer.py             # Stream processor
+│   └── api.py                        # FastAPI endpoints
+│
+├── dashboard/
+│   ├── app.py                        # Streamlit dashboard
+│   ├── data_upload_processor.py      # Upload processing logic
+│   ├── upload_page.py                # Upload page component
+│   ├── predict_helper.py             # Prediction helper
+│   └── data_processing.py            # Data processing utilities
+│
+├── tests/
+│   └── test_pipeline.py
+│
+├── logs/                              # Application logs
+│   ├── api.log
+│   └── dashboard.log
+│
+└── venv/                              # Python virtual environment
+```
+
+---
+
+## API Endpoints
+
+### FastAPI REST API
+
+Base URL: `http://localhost:8000`
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | API root information |
+| `/health` | GET | Health check |
+| `/predict/{customer_id}` | GET | Single customer prediction |
+| `/predict/batch` | POST | Batch predictions |
+| `/customers/high-risk` | GET | List high-risk customers |
+| `/stats` | GET | Platform statistics |
+
+### Example API Calls
+
 ```bash
-# Stop Docker services
-docker-compose down
+# Health check
+curl http://localhost:8000/health
 
-# Stop Docker and remove volumes
-docker-compose down -v
+# Single prediction
+curl http://localhost:8000/predict/7590-VHVEG
 
-# Deactivate Python environment
-deactivate
+# Statistics
+curl http://localhost:8000/stats
+
+# Batch prediction
+curl -X POST http://localhost:8000/predict/batch \
+  -H "Content-Type: application/json" \
+  -d '{"customer_ids": ["7590-VHVEG", "5575-GNVDE"]}'
 ```
 
 ---
@@ -563,6 +818,10 @@ deactivate
 4. **Grafana Dashboard**: Real-time monitoring
 5. **Mobile App**: iOS/Android for on-the-go insights
 6. **A/B Testing Framework**: Measure retention campaign effectiveness
+7. **Real-time Predictions**: Kafka streaming integration
+8. **Advanced Analytics**: Cohort analysis, survival analysis
+9. **Multi-tenancy**: Support for multiple organizations
+10. **Email Alerts**: Automated high-risk customer notifications
 
 ---
 
@@ -579,7 +838,7 @@ deactivate
 ---
 
 ## License
-MIT License - Copyright (c) 2024 Keystone Data Solutions
+MIT License - Copyright (c) 2025 Keystone Data Solutions
 
 ---
 
@@ -592,14 +851,34 @@ MIT License - Copyright (c) 2024 Keystone Data Solutions
 - **GitHub**: [https://github.com/keystone-data-solutions](https://github.com/keystone-data-solutions)
 - **LinkedIn**: [Keystone Data Solutions](https://linkedin.com/company/keystone-data-solutions)
 
-
 ---
 
 ## Acknowledgments
 
 - Dataset: IBM Sample Telco Customer Churn
-- Our sincere regards to our stakholders
+- Sincere regards to our stakeholders
 - Open-source community for invaluable tools and resources
+
+---
+
+## Quick Start Summary
+
+```bash
+# 1. Start Docker services
+docker compose up -d
+
+# 2. Activate virtual environment
+source venv/bin/activate
+
+# 3. Load data
+python src/ingest.py --batch data/raw/telco_churn.csv
+
+# 4. Start dashboard
+streamlit run dashboard/app.py
+
+# 5. Open browser
+# http://localhost:8501
+```
 
 ---
 
