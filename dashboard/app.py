@@ -19,6 +19,13 @@ try:
 except:
     PREDICTION_AVAILABLE = False
 
+# Import recommendations engine
+try:
+    from recommendations_engine import RecommendationsEngine, get_recommendations
+    RECOMMENDATIONS_AVAILABLE = True
+except:
+    RECOMMENDATIONS_AVAILABLE = False
+
 # Page config
 st.set_page_config(
     page_title="ChurnGuard Analytics | Keystone Data Solutions",
@@ -856,8 +863,26 @@ def show_customer_prediction():
     with col2:
         if 'prediction' in st.session_state:
             pred = st.session_state['prediction']
+            cust = pred.get('customer', {})
             
-            # Display result in a cleaner way
+            # Generate recommendations if available
+            recommendations = None
+            if RECOMMENDATIONS_AVAILABLE:
+                try:
+                    recommendations = get_recommendations(
+                        customer_id=pred['customer_id'],
+                        churn_probability=pred['probability'],
+                        risk_level=pred['risk_level'],
+                        tenure=cust.get('tenure', 12),
+                        monthly_charges=cust.get('monthly_charges', 64.76) if cust.get('monthly_charges') else 64.76,
+                        contract=cust.get('contract'),
+                        payment_method=cust.get('paymentmethod'),
+                        internet_service=cust.get('internetservice')
+                    )
+                except Exception as e:
+                    st.warning(f"Could not generate recommendations: {e}")
+            
+            # Display prediction result
             st.markdown(f"""
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
@@ -867,7 +892,7 @@ def show_customer_prediction():
             </div>
             """, unsafe_allow_html=True)
             
-            # Display probability in streamlit metric for better rendering
+            # Display probability
             st.markdown('<div class="result-box">', unsafe_allow_html=True)
             col_a, col_b, col_c = st.columns([1, 2, 1])
             with col_b:
@@ -900,17 +925,73 @@ def show_customer_prediction():
                 st.markdown('<div class="card" style="margin-top: 1rem;">', unsafe_allow_html=True)
                 st.markdown("### Customer Profile")
                 
-                cust = pred['customer']
-                
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.markdown(f"**Tenure:** {cust.get('tenure', 'N/A')} months")
                 with col2:
                     st.markdown(f"**Contract:** {cust.get('contract', 'N/A')}")
                 with col3:
-                    st.markdown(f"**Monthly:** ${cust.get('monthly_charges', 0):.2f}")
+                    monthly = cust.get('monthly_charges', 0)
+                    if monthly:
+                        st.markdown(f"**Monthly:** ${float(monthly):.2f}")
+                    else:
+                        st.markdown(f"**Monthly:** N/A")
                 
                 st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Display Recommendations
+            if recommendations:
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("### 💰 Customer Value Analysis")
+                
+                clv = recommendations['clv_metrics']
+                
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.metric("Value at Risk", f"${clv['value_at_risk']:,.0f}")
+                with col2:
+                    st.metric("Risk-Adjusted CLV", f"${clv['risk_adjusted_clv']:,.0f}")
+                with col3:
+                    st.metric("Potential CLV", f"${clv['potential_clv']:,.0f}")
+                with col4:
+                    st.metric("Expected Lifespan", f"{clv['expected_lifespan']} mo")
+                
+                # Recommendations
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("### 🎯 Recommended Actions")
+                
+                st.markdown(f"""
+                <div class="card" style="background: linear-gradient(135deg, rgba(66, 153, 225, 0.1) 0%, rgba(66, 153, 225, 0.05) 100%); border: 1px solid #4299e1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h4 style="margin: 0; color: #4299e1;">Priority: {recommendations['priority']}/10</h4>
+                        <span style="background: rgba(66, 153, 225, 0.2); color: #4299e1; border: 1px solid #4299e1; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">
+                            {recommendations['segment'].replace('_', ' ')}
+                        </span>
+                    </div>
+                    <p style="color: #cbd5e0; margin-bottom: 0;">
+                        <strong>Timeline:</strong> {recommendations['timeline']}
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Action Items
+                st.markdown("#### 📋 Action Items")
+                for action in recommendations['recommended_actions'][:5]:  # Show top 5
+                    st.markdown(f"- {action}")
+                
+                # ROI Analysis
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("### 📊 Retention ROI Analysis")
+                
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Retention Cost", f"${recommendations['estimated_retention_cost']:,.0f}")
+                with col2:
+                    roi = recommendations['expected_roi']
+                    st.metric("Expected ROI", f"{roi:.0f}%", 
+                             delta="Positive" if roi > 0 else "Negative")
+                with col3:
+                    st.metric("Success Rate", f"{recommendations['success_probability']:.0%}")
         else:
             st.markdown("""
             <div class="empty-state">
@@ -1097,10 +1178,12 @@ def show_system_status():
         """, unsafe_allow_html=True)
     
     with col3:
-        st.markdown("""
+        rec_status = "Loaded" if RECOMMENDATIONS_AVAILABLE else "Not Available"
+        rec_color = "#48bb78" if RECOMMENDATIONS_AVAILABLE else "#ed8936"
+        st.markdown(f"""
         <div class="card">
-            <h3 style="color: #ed8936;">ML Model</h3>
-            <p style="color: #cbd5e0; margin: 0.5rem 0;">Training Required</p>
+            <h3 style="color: {rec_color};">ML Model</h3>
+            <p style="color: #cbd5e0; margin: 0.5rem 0;">Recommendations {rec_status}</p>
             <p style="color: #718096; font-size: 0.9rem; margin: 0;">Accuracy: 94.2%</p>
         </div>
         """, unsafe_allow_html=True)
@@ -1113,13 +1196,13 @@ def show_system_status():
     stats = get_stats()
     
     info_data = {
-        'Component': ['Dashboard', 'Database', 'API Server', 'Docker Services', 'Model Version'],
-        'Status': ['Online', 'Connected', 'Running', 'Active', 'v1.0'],
+        'Component': ['Dashboard', 'Database', 'API Server', 'Recommendations Engine', 'Model Version'],
+        'Status': ['Online', 'Connected', 'Running', 'Loaded' if RECOMMENDATIONS_AVAILABLE else 'Disabled', 'v1.0'],
         'Details': [
             'Streamlit 1.28.0',
             f'{stats["total"]:,} customers',
             'FastAPI 0.104.1',
-            'PostgreSQL, Cassandra, Kafka',
+            'CLV Analysis Enabled' if RECOMMENDATIONS_AVAILABLE else 'Install recommendations_engine.py',
             'XGBoost Classifier'
         ]
     }
