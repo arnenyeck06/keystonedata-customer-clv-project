@@ -13,44 +13,93 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # Page config
 st.set_page_config(
-    page_title="ChurnGuard Analytics",
+    page_title="ChurnGuard Executive Dashboard",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+# =========================
+# Custom Executive CSS
+# =========================
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #1f77b4;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #1f77b4;
-    }
-    .high-risk {
-        color: #d62728;
-        font-weight: bold;
-    }
-    .medium-risk {
-        color: #ff7f0e;
-        font-weight: bold;
-    }
-    .low-risk {
-        color: #2ca02c;
-        font-weight: bold;
-    }
+body {
+    background-color: #f7f9fc;
+}
+
+.main-header {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #1f2937;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.kpi-green {
+    border-top: 6px solid #16a34a;
+}
+
+.kpi-yellow {
+    border-top: 6px solid #facc15;
+}
+
+.kpi-red {
+    border-top: 6px solid #dc2626;
+}
+
+.kpi-title {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-green {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-yellow {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.badge-red {
+    background: #fee2e2;
+    color: #7f1d1d;
+}
 </style>
 """, unsafe_allow_html=True)
 
+# =========================
 # Database config
+# =========================
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
@@ -61,19 +110,18 @@ DB_CONFIG = {
 
 @st.cache_data
 def get_stats():
-    """Get database statistics"""
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
-    
+
     cursor.execute("SELECT COUNT(*) FROM customers")
     total = cursor.fetchone()[0]
-    
+
     cursor.execute("SELECT COUNT(*) FROM customers WHERE churn = 'Yes'")
     churned = cursor.fetchone()[0]
-    
+
     cursor.close()
     conn.close()
-    
+
     return {
         'total': total,
         'churned': churned,
@@ -83,40 +131,29 @@ def get_stats():
 
 @st.cache_data
 def load_customer_data():
-    """Load customer data from database"""
     conn = psycopg2.connect(**DB_CONFIG)
-    query = "SELECT * FROM customers LIMIT 1000"
-    df = pd.read_sql(query, conn)
+    df = pd.read_sql("SELECT * FROM customers LIMIT 1000", conn)
     conn.close()
     return df
 
+# =========================
+# Main App
+# =========================
 def main():
-    # Header
-    st.markdown('<h1 class="main-header">ChurnGuard Analytics Dashboard</h1>', unsafe_allow_html=True)
-    st.markdown("### Predictive Customer Churn Analysis Platform")
-    st.markdown("---")
-    
-    # Sidebar
+    st.markdown('<div class="main-header">ChurnGuard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtitle">Executive Customer Retention Dashboard</div>', unsafe_allow_html=True)
+
     st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Select Page", [
-        "Overview",
+    page = st.sidebar.radio("Go to", [
+        "Executive Overview",
         "Customer Lookup",
         "High-Risk Customers",
         "Analytics"
     ])
-    
-    st.sidebar.markdown("---")
-    st.sidebar.info("**ChurnGuard Analytics**\n\nPredicting customer churn with machine learning")
-    
-    # Load data
-    try:
-        stats = get_stats()
-    except Exception as e:
-        st.error(f"Error loading data: {e}")
-        st.stop()
-    
-    # Page routing
-    if page == "Overview":
+
+    stats = get_stats()
+
+    if page == "Executive Overview":
         show_overview(stats)
     elif page == "Customer Lookup":
         show_customer_lookup()
@@ -125,121 +162,112 @@ def main():
     elif page == "Analytics":
         show_analytics()
 
+# =========================
+# Pages
+# =========================
 def show_overview(stats):
-    """Overview page with key metrics"""
-    st.header("Platform Overview")
-    
-    # Key metrics
+    st.subheader("📌 Executive Summary")
+
+    churn_rate = stats['churn_rate']
+
+    if churn_rate < 0.15:
+        badge = "badge-green"
+        label = "Healthy"
+    elif churn_rate < 0.25:
+        badge = "badge-yellow"
+        label = "At Risk"
+    else:
+        badge = "badge-red"
+        label = "Critical"
+
     col1, col2, col3, col4 = st.columns(4)
-    
+
     with col1:
-        st.metric(
-            label="Total Customers",
-            value=f"{stats['total']:,}"
-        )
-    
+        st.markdown(f"""
+        <div class="kpi-card kpi-green">
+            <div class="kpi-title">Total Customers</div>
+            <div class="kpi-value">{stats['total']:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col2:
-        st.metric(
-            label="Churned Customers",
-            value=f"{stats['churned']:,}",
-            delta=f"{stats['churn_rate']:.1%}",
-            delta_color="inverse"
-        )
-    
+        st.markdown(f"""
+        <div class="kpi-card kpi-red">
+            <div class="kpi-title">Churned Customers</div>
+            <div class="kpi-value">{stats['churned']:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col3:
-        st.metric(
-            label="Retained Customers",
-            value=f"{stats['retained']:,}",
-            delta=f"{(1-stats['churn_rate']):.1%}",
-            delta_color="normal"
-        )
-    
+        st.markdown(f"""
+        <div class="kpi-card kpi-green">
+            <div class="kpi-title">Retained Customers</div>
+            <div class="kpi-value">{stats['retained']:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col4:
-        at_risk = int(stats['total'] * 0.15)
-        st.metric(
-            label="Estimated At-Risk",
-            value=f"{at_risk:,}",
-            delta="15% of total"
-        )
-    
+        st.markdown(f"""
+        <div class="kpi-card kpi-yellow">
+            <div class="kpi-title">Churn Health</div>
+            <span class="badge {badge}">{label}</span>
+            <div class="kpi-value">{churn_rate:.1%}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     st.markdown("---")
-    
-    # Visualizations
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
-        st.subheader("Churn Distribution")
         fig = go.Figure(data=[go.Pie(
             labels=['Retained', 'Churned'],
             values=[stats['retained'], stats['churned']],
-            hole=0.4,
-            marker_colors=['#2ca02c', '#d62728']
+            hole=0.5,
+            marker_colors=['#16a34a', '#dc2626']
         )])
-        fig.update_layout(height=400)
+        fig.update_layout(title="Customer Base Composition")
         st.plotly_chart(fig, use_container_width=True)
-    
+
     with col2:
-        st.subheader("Business Impact")
-        
         avg_revenue = 64.76
-        annual_revenue_loss = stats['churned'] * avg_revenue * 12
-        
+        annual_loss = stats['churned'] * avg_revenue * 12
+
         st.markdown(f"""
-        **Current Churn Impact:**
-        - Monthly Revenue Loss: **${stats['churned'] * avg_revenue:,.2f}**
-        - Annual Revenue Loss: **${annual_revenue_loss:,.2f}**
-        - Customers Lost: **{stats['churned']:,}**
-        
-        **Potential Savings (15% reduction):**
-        - Customers Saved: **{int(stats['churned'] * 0.15):,}**
-        - Revenue Saved: **${annual_revenue_loss * 0.15:,.2f}/year**
+        ### 💰 Financial Impact
+
+        - **Annual Revenue Lost:** `${annual_loss:,.2f}`
+        - **Customers Lost:** `{stats['churned']:,}`
+        - **15% Reduction Upside:** `${annual_loss * 0.15:,.2f} / year`
         """)
 
 def show_customer_lookup():
-    """Customer lookup page"""
-    st.header("Customer Churn Prediction")
-    
-    st.markdown("Enter a customer ID to get churn prediction and risk analysis.")
-    
-    customer_id = st.text_input("Customer ID", value="7590-VHVEG")
-    
-    if st.button("Predict Churn", type="primary"):
-        st.info("Prediction feature requires trained model. Please run training script first.")
+    st.header("🔍 Customer Lookup")
+    st.info("Model integration required for live predictions.")
 
 def show_high_risk_customers():
-    """High-risk customers page"""
-    st.header("High-Risk Customers")
-    
-    st.markdown("Customers with high churn probability requiring immediate attention.")
-    st.info("This feature requires trained model integration.")
+    st.header("🚨 High-Risk Customers")
+    st.warning("This view will surface customers with highest churn probability.")
 
 def show_analytics():
-    """Analytics page"""
-    st.header("Customer Analytics")
-    
-    try:
-        df = load_customer_data()
-        
-        # Churn by contract
-        st.subheader("Churn Rate by Contract Type")
-        churn_by_contract = df.groupby('contract')['churn'].apply(
-            lambda x: (x == 'Yes').sum() / len(x) * 100
-        ).reset_index()
-        churn_by_contract.columns = ['Contract', 'Churn Rate (%)']
-        
-        fig = px.bar(churn_by_contract, x='Contract', y='Churn Rate (%)', 
-                     color='Churn Rate (%)', color_continuous_scale='Reds')
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Monthly charges distribution
-        st.subheader("Monthly Charges Distribution")
-        fig = px.histogram(df, x='monthly_charges', color='churn', 
-                         barmode='overlay', nbins=30,
-                         color_discrete_map={'Yes': '#d62728', 'No': '#2ca02c'})
-        st.plotly_chart(fig, use_container_width=True)
-    
-    except Exception as e:
-        st.error(f"Error loading analytics: {e}")
+    st.header("📈 Analytics")
 
+    df = load_customer_data()
+
+    churn_by_contract = df.groupby('contract')['churn'].apply(
+        lambda x: (x == 'Yes').mean() * 100
+    ).reset_index()
+
+    fig = px.bar(
+        churn_by_contract,
+        x='contract',
+        y='churn',
+        color='churn',
+        color_continuous_scale=['#16a34a', '#facc15', '#dc2626'],
+        labels={'churn': 'Churn Rate (%)'}
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+# =========================
 if __name__ == "__main__":
     main()
