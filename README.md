@@ -35,8 +35,8 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 4. **Data Science & Analytics Team**: Model monitoring, evaluation, and continuous improvement
 
 ---
+### Platform structure
 
-## Platform structure
 keystonedata-platform/
 ├── README.md
 ├── docker-compose.yml
