@@ -41,9 +41,6 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 ### Keystone Data Solutions' Data Pipeline
 ```
 ---
-<img width="1325" height="763" alt="Screenshot 2025-12-16 at 7 42 33 PM" src="https://github.com/user-attachments/assets/498553ce-104c-4a31-84f8-56d3aace9017" />
-
----
 ## Project Structure
 
 │   ├── data_upload_processor.py      # Upload processing logic
