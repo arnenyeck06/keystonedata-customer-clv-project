@@ -36,26 +36,65 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 
 ---
 
-## Platform Architecture
-
-### Keystone Data Solutions' Data Pipeline
-```
----
-## Project Structure
-
-│   ├── data_upload_processor.py      # Upload processing logic
-│   ├── upload_page.py                # Upload page component
-│   ├── predict_helper.py             # Prediction helper
-│   └── data_processing.py            # Data processing utilities
+## Platform structure
+keystonedata-platform/
+├── README.md
+├── docker-compose.yml
+├── requirements.txt
+├── .gitignore
+├── start_platform.sh
+├── stop_platform.sh
+│
+├── docs/
+│   ├── business_requirements.md
+│   ├── architecture_design.md
+│   └── DATA_UPLOAD_INTEGRATION.md
+│
+├── data/
+│   ├── raw/
+│   │   └── telco_churn.csv
+│   ├── processed/
+│   └── models/
+│
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_model_training.ipynb
+│   └── 04_evaluation.ipynb
+│
+├── src/
+│   ├── db_postgres.py
+│   ├── db_cassandra.py
+│   ├── db_hdfs.py
+│   ├── ingest.py
+│   ├── ingest_hdfs.py
+│   ├── process.py
+│   ├── process_spark.py
+│   ├── train.py
+│   ├── train_spark.py
+│   ├── predict.py
+│   ├── kafka_producer.py
+│   ├── kafka_consumer.py
+│   └── api.py
+│
+├── dashboard/
+│   ├── app.py                        ← Main Streamlit dashboard
+│   ├── recommendations_engine.py     ← CLV & recommendations
+│   ├── data_upload_processor.py      ← Batch upload processor
+│   ├── upload_page.py                ← Upload page component
+│   ├── predict_helper.py
+│   └── data_processing.py
 │
 ├── tests/
 │   └── test_pipeline.py
 │
-├── logs/                              # Application logs
+├── logs/
 │   ├── api.log
 │   └── dashboard.log
 │
-└── venv/                              # Python virtual environment
+└── venv/
+
+
 ```
 
 ---
