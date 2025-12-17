@@ -79,10 +79,10 @@ keystonedata-platform/
 │   └── api.py
 │
 ├── dashboard/
-│   ├── app.py                        ← Main Streamlit dashboard
-│   ├── recommendations_engine.py     ← CLV & recommendations
-│   ├── data_upload_processor.py      ← Batch upload processor
-│   ├── upload_page.py                ← Upload page component
+│   ├── app.py                        
+│   ├── recommendations_engine.py     
+│   ├── data_upload_processor.py      
+│   ├── upload_page.py               
 │   ├── predict_helper.py
 │   └── data_processing.py
 │
