@@ -40,24 +40,9 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
 
 ### Keystone Data Solutions' Data Pipeline
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│              Keystone Data Solutions Platform Architecture               │
-└─────────────────────────────────────────────────────────────────────────┘
+---
+<img width="1325" height="763" alt="Screenshot 2025-12-16 at 7 42 33 PM" src="https://github.com/user-attachments/assets/498553ce-104c-4a31-84f8-56d3aace9017" />
 
-    Data Sources → Ingestion → Storage → Processing → ML Models → API/Dashboard
-         ↓             ↓          ↓          ↓           ↓            ↓
-    
-  ┌──────────┐   ┌────────┐  ┌───────────┐  ┌──────┐  ┌─────────┐  ┌─────────┐
-  │Customer  │──▶│ Kafka  │─▶│PostgreSQL │─▶│Pandas│─▶│ XGBoost │─▶│ FastAPI │
-  │   Data   │   │Streams │  └───────────┘  │  ETL │  │   SVM   │  │   API   │
-  │  (CSV,   │   └────────┘  ┌───────────┐  │ Numpy│  │Logistic │  └─────────┘
-  │   JSON)  │               │ Cassandra │  └──────┘  │   Reg   │       │
-  └──────────┘               │Time-Series│            └─────────┘       ↓
-                             └───────────┘                         ┌──────────┐
-                                                                   │Streamlit │
-                                                                   │Dashboard │
-                                                                   └──────────┘
-```
 ---
 ## Project Structure
 
