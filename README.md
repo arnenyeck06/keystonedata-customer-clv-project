@@ -59,7 +59,24 @@ The goal of Keystone Data Solutions is to provide a real-time Customer Churn Pre
                                                                    └──────────┘
 ```
 ---
+## Project Structure
 
+│   ├── data_upload_processor.py      # Upload processing logic
+│   ├── upload_page.py                # Upload page component
+│   ├── predict_helper.py             # Prediction helper
+│   └── data_processing.py            # Data processing utilities
+│
+├── tests/
+│   └── test_pipeline.py
+│
+├── logs/                              # Application logs
+│   ├── api.log
+│   └── dashboard.log
+│
+└── venv/                              # Python virtual environment
+```
+
+---
 ## Technology Stack
 
 ### Keystone Data Solutions' Complete Tech Stack
@@ -714,65 +731,6 @@ source venv/bin/activate
 # Reinstall requirements
 pip install -r requirements.txt
 ```
-
----
-
-## Project Structure
-
-```
-keystonedata-platform/
-├── README.md                           # This file
-├── docker-compose.yml                  # Docker services configuration
-├── requirements.txt                    # Python dependencies
-├── .gitignore                         # Git ignore rules
-├── start_platform.sh                  # Startup script
-├── stop_platform.sh                   # Shutdown script
-│
-├── docs/                              # Documentation
-│   ├── business_requirements.md
-│   ├── architecture_design.md
-│   └── DATA_UPLOAD_INTEGRATION.md
-│
-├── data/
-│   ├── raw/                           # Original datasets
-│   │   └── telco_churn.csv
-│   ├── processed/                     # Cleaned/processed data
-│   └── models/                        # Saved ML models
-│
-├── notebooks/                         # Jupyter notebooks
-│   ├── 01_eda.ipynb
-│   ├── 02_feature_engineering.ipynb
-│   ├── 03_model_training.ipynb
-│   └── 04_evaluation.ipynb
-│
-├── src/                               # Source code
-│   ├── db_postgres.py                # PostgreSQL handler
-│   ├── db_cassandra.py               # Cassandra handler
-│   ├── ingest.py                     # Data ingestion
-│   ├── process.py                    # ETL & feature engineering
-│   ├── train.py                      # Model training
-│   ├── predict.py                    # Inference service
-│   ├── kafka_producer.py             # Event simulator
-│   ├── kafka_consumer.py             # Stream processor
-│   └── api.py                        # FastAPI endpoints
-│
-├── dashboard/
-│   ├── app.py                        # Streamlit dashboard
-│   ├── data_upload_processor.py      # Upload processing logic
-│   ├── upload_page.py                # Upload page component
-│   ├── predict_helper.py             # Prediction helper
-│   └── data_processing.py            # Data processing utilities
-│
-├── tests/
-│   └── test_pipeline.py
-│
-├── logs/                              # Application logs
-│   ├── api.log
-│   └── dashboard.log
-│
-└── venv/                              # Python virtual environment
-```
-
 ---
 
 ## API Endpoints
