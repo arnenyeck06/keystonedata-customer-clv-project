@@ -512,24 +512,28 @@ Expected: ~7044 lines (7043 customers + 1 header)
 ### Step 10: Initialize Database
 
 ```bash
-# Create database scripts (use provided src/db_postgres.py, src/db_cassandra.py)
-
-# Test PostgreSQL connection
+# PostgreSQL
+python src/db_postgres.py --init
 python src/db_postgres.py --test
 
-# Initialize PostgreSQL schema
-python src/db_postgres.py --init
-
-# Test Cassandra connection
+# Cassandra
+python src/db_cassandra.py --init
 python src/db_cassandra.py --test
 
-# Initialize Cassandra schema
-python src/db_cassandra.py --init
+# HDFS base directory
+curl -X PUT "http://localhost:9870/webhdfs/v1/churn/data?op=MKDIRS&user.name=root"
+
+# Kafka (auto-creates topics, but to pre-create explicitly)
+docker exec -it churn-kafka kafka-topics --create \
+  --bootstrap-server localhost:9092 \
+  --topic churn-events \
+  --partitions 1 \
+  --replication-factor 1
 ```
 
 ---
 
-### Step 11: Load Data
+### Step 11: Load Data into postgres
 
 ```bash
 # Load customer data into PostgreSQL
