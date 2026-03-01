@@ -1,10 +1,44 @@
-version: '3.8'
-
 services:
+  # PostgreSQL (replacing MySQL for better compatibility)
+  postgres:
+    image: postgres:14
+    container_name: churn-postgres
+    environment:
+      POSTGRES_USER: churn_user
+      POSTGRES_PASSWORD: churn_pass
+      POSTGRES_DB: churn_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - churnguard-network
+    restart: unless-stopped
+
+  # Cassandra (ARM64 compatible)
+  cassandra:
+    image: arm64v8/cassandra:4.1
+    container_name: churn-cassandra
+    hostname: cassandra
+    environment:
+      CASSANDRA_CLUSTER_NAME: ChurnCluster
+      CASSANDRA_DC: datacenter1
+      CASSANDRA_RACK: rack1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      MAX_HEAP_SIZE: 512M
+      HEAP_NEWSIZE: 128M
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks:
+      - churnguard-network
+    restart: unless-stopped
+
   # Zookeeper (for Kafka)
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
-    container_name: zookeeper
+    container_name: churn-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -12,70 +46,43 @@ services:
       - "2181:2181"
     networks:
       - churnguard-network
+    restart: unless-stopped
 
   # Kafka Broker
   kafka:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: kafka
+    container_name: churn-kafka
     depends_on:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECT: churn-zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     ports:
       - "9092:9092"
     networks:
       - churnguard-network
-
-  # MySQL
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: churnguard
-      MYSQL_USER: churnguard_user
-      MYSQL_PASSWORD: churnguard_pass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - churnguard-network
-
-  # Cassandra
-  cassandra:
-    image: cassandra:4.1
-    container_name: cassandra
-    environment:
-      - CASSANDRA_CLUSTER_NAME=ChurnGuardCluster
-      - CASSANDRA_DC=datacenter1
-      - CASSANDRA_RACK=rack1
-    ports:
-      - "9042:9042"
-    volumes:
-      - cassandra_data:/var/lib/cassandra
-    networks:
-      - churnguard-network
+    restart: unless-stopped
 
   # Hadoop NameNode
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
-    container_name: namenode
+    container_name: hadoop-namenode
     environment:
-      - CLUSTER_NAME=churnguard-hadoop
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - CORE_CONF_hadoop_http_staticuser_user=root
-      - CORE_CONF_hadoop_proxyuser_hue_hosts=*
-      - CORE_CONF_hadoop_proxyuser_hue_groups=*
-      - HDFS_CONF_dfs_webhdfs_enabled=true
-      - HDFS_CONF_dfs_permissions_enabled=false
-      - HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check=false
+      CLUSTER_NAME: churnguard-hadoop
+      CORE_CONF_fs_defaultFS: hdfs://namenode:8020
+      CORE_CONF_hadoop_http_staticuser_user: root
+      CORE_CONF_hadoop_proxyuser_hue_hosts: "*"
+      CORE_CONF_hadoop_proxyuser_hue_groups: "*"
+      HDFS_CONF_dfs_webhdfs_enabled: "true"
+      HDFS_CONF_dfs_permissions_enabled: "false"
+      HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check: "false"
+      HDFS_CONF_dfs_datanode_hostname: datanode
+      HDFS_CONG_dfs_client_use_datanode_hostname: "true"
     ports:
       - "9870:9870"
       - "9000:9000"
@@ -89,26 +96,28 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped
 
   # Hadoop DataNode
-  datanode1:
+  datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
-    container_name: datanode1
+    container_name: hadoop-datanode
+    hostname: datanode
     depends_on:
       - namenode
     environment:
-      - SERVICE_PRECONDITION=namenode:8020
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - CORE_CONF_hadoop_http_staticuser_user=root
-      - CORE_CONF_hadoop_proxyuser_hue_hosts=*
-      - CORE_CONF_hadoop_proxyuser_hue_groups=*
-      - HDFS_CONF_dfs_webhdfs_enabled=true
-      - HDFS_CONF_dfs_permissions_enabled=false
-      - HDFS_CONF_dfs_replication=1
+      SERVICE_PRECONDITION: "namenode:8020"
+      CORE_CONF_fs_defaultFS: hdfs://namenode:8020
+      CORE_CONF_hadoop_http_staticuser_user: root
+      CORE_CONF_hadoop_proxyuser_hue_hosts: "*"
+      CORE_CONF_hadoop_proxyuser_hue_groups: "*"
+      HDFS_CONF_dfs_webhdfs_enabled: "true"
+      HDFS_CONF_dfs_permissions_enabled: "false"
+      HDFS_CONF_dfs_replication: 1
     ports:
       - "9864:9864"
     volumes:
-      - datanode1_data:/hadoop/dfs/data
+      - datanode_data:/hadoop/dfs/data
     networks:
       - churnguard-network
     healthcheck:
@@ -116,13 +125,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-# Spark Master
+    restart: unless-stopped
+
+  # Spark Master
   spark-master:
     image: bde2020/spark-master:3.3.0-hadoop3.3
     container_name: spark-master
     environment:
-      - INIT_DAEMON_STEP=setup_spark
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      INIT_DAEMON_STEP: setup_spark
+      CORE_CONF_fs_defaultFS: hdfs://namenode:8020
     ports:
       - "8080:8080"
       - "7077:7077"
@@ -130,26 +141,29 @@ services:
       - churnguard-network
     depends_on:
       - namenode
+    restart: unless-stopped
 
   # Spark Worker
   spark-worker:
     image: bde2020/spark-worker:3.3.0-hadoop3.3
     container_name: spark-worker
     environment:
-      - SPARK_MASTER=spark://spark-master:7077
-      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
-      - SPARK_WORKER_CORES=2
-      - SPARK_WORKER_MEMORY=2g
+      SPARK_MASTER: spark://spark-master:7077
+      CORE_CONF_fs_defaultFS: hdfs://namenode:8020
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 2g
     networks:
       - churnguard-network
     depends_on:
       - spark-master
+    restart: unless-stopped
 
 networks:
   churnguard-network:
     driver: bridge
+
 volumes:
-  mysql_data:
+  postgres_data:
   cassandra_data:
   namenode_data:
-  datanode1_data:
+  datanode_data:

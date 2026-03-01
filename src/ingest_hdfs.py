@@ -1,157 +1,125 @@
-"""
-HDFS Data Ingestion Script for ChurnGuard Platform
-Uploads raw data files to Hadoop HDFS from macOS
-"""
-
-import os
+from hdfs import InsecureClient
+import pandas as pd
 import argparse
-import subprocess
+import sys
+import os
+import re
 
-# --- HDFS CONFIG ---
-HDFS_NN = "hdfs://hadoop-namenode:9000"
-HDFS_TARGET = f"{HDFS_NN}/churnguard/data/raw"
+HDFS_CONFIG = {
+    'url': 'http://localhost:9870',
+    'user': 'root'
+}
 
-# Name of the namenode container (must match docker-compose)
-NAMENODE_CONTAINER = "namenode"
-
-
-def run_hdfs(cmd):
-    """
-    Run an HDFS command inside the namenode container.
-    """
-    full_cmd = f"docker exec {NAMENODE_CONTAINER} hdfs dfs {cmd}"
-
+def get_hdfs_client():
+    """Create HDFS client connection with DataNode redirect fix"""
     try:
-        result = subprocess.run(
-            full_cmd,
-            shell=True,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        print("HDFS command failed:")
-        print(e.stderr)
-        return None
+        client = InsecureClient(HDFS_CONFIG['url'], user=HDFS_CONFIG['user'])
 
+        # Patch session to rewrite DataNode hostname in redirects
+        # (DataNode advertises its Docker internal hostname which can't be resolved outside Docker)
+        original_resolve = client._session.resolve_redirects
+        def patched_redirects(resp, req, **kwargs):
+            for r in original_resolve(resp, req, **kwargs):
+                if r.url:
+                    r.url = re.sub(r'http://[^/]+:9864', 'http://localhost:9864', r.url)
+                yield r
+        client._session.resolve_redirects = patched_redirects
 
-def upload_file(local_path, hdfs_name=None):
-    """
-    Upload a local file into HDFS.
-    """
+        return client
+    except Exception as e:
+        print(f"Error connecting to HDFS: {e}")
+        sys.exit(1)
 
-    if not os.path.exists(local_path):
-        print(f"Local file not found: {local_path}")
-        return False
-
-    if hdfs_name is None:
-        hdfs_name = os.path.basename(local_path)
-
-    print(f"Uploading file: {local_path}")
-
-    container_tmp = f"/tmp/{os.path.basename(local_path)}"
-
+def ingest_to_hdfs(csv_file, hdfs_path='/churn/data/'):
+    """Upload CSV file to HDFS"""
     try:
-        # Copy file to the namenode container
-        subprocess.run(
-            f"docker cp {local_path} {NAMENODE_CONTAINER}:{container_tmp}",
-            shell=True,
-            check=True
-        )
+        # Check if file exists
+        if not os.path.exists(csv_file):
+            print(f"✗ File not found: {csv_file}")
+            sys.exit(1)
 
-        hdfs_dest = f"{HDFS_TARGET}/{hdfs_name}"
+        print(f"Reading {csv_file}...")
 
-        # Make sure directory exists in HDFS
-        run_hdfs(f"-mkdir -p {HDFS_TARGET}")
+        # Get HDFS client
+        client = get_hdfs_client()
 
-        # Upload the file
-        result = run_hdfs(f"-put -f {container_tmp} {hdfs_dest}")
+        # Create directory if it doesn't exist
+        print(f"Creating HDFS directory: {hdfs_path}")
+        try:
+            client.makedirs(hdfs_path)
+        except:
+            pass  # Directory might already exist
 
-        if result is None:
-            print("Upload failed.")
-            return False
+        # Get filename
+        filename = os.path.basename(csv_file)
+        hdfs_file_path = os.path.join(hdfs_path, filename)
+
+        # Upload file
+        print(f"Uploading to HDFS: {hdfs_file_path}")
+        client.upload(hdfs_file_path, csv_file, overwrite=True)
 
         # Verify upload
-        ls_output = run_hdfs(f"-ls {hdfs_dest}")
-        if ls_output:
-            print(f"File uploaded to HDFS: {hdfs_dest}")
-            return True
+        file_status = client.status(hdfs_file_path)
+        file_size_mb = file_status['length'] / (1024 * 1024)
 
-        print("Upload attempted, but could not verify the file.")
-        return False
+        print(f"✓ Successfully uploaded to HDFS")
+        print(f"  Path: {hdfs_file_path}")
+        print(f"  Size: {file_size_mb:.2f} MB")
+
+        # List files in directory
+        print(f"\nFiles in {hdfs_path}:")
+        files = client.list(hdfs_path)
+        for f in files:
+            print(f"  - {f}")
 
     except Exception as e:
-        print(f"Unexpected error: {e}")
-        return False
+        print(f"✗ Error ingesting to HDFS: {e}")
+        sys.exit(1)
 
+def verify_hdfs():
+    """Verify HDFS connection and list files"""
+    try:
+        client = get_hdfs_client()
 
-def upload_main_dataset():
-    """
-    Upload the main telco_churn.csv dataset to HDFS.
-    """
-    print("Starting HDFS upload")
+        print("✓ Connected to HDFS")
 
-    # Check if namenode container is running
-    status = subprocess.run(
-        f"docker ps --filter name={NAMENODE_CONTAINER} --format '{{{{.Status}}}}'",
-        shell=True,
-        capture_output=True,
-        text=True
-    )
+        # List root directory
+        print("\nRoot directory contents:")
+        try:
+            files = client.list('/')
+            for f in files:
+                print(f"  - /{f}")
+        except Exception as e:
+            print(f"  (empty or error: {e})")
 
-    if "Up" not in status.stdout:
-        print("Namenode container is not running.")
-        print(f"Start it using: docker compose up -d {NAMENODE_CONTAINER}")
-        return False
+        # Check churn directory
+        print("\nChurn data directory:")
+        try:
+            files = client.list('/churn/data/')
+            for f in files:
+                status = client.status(f'/churn/data/{f}')
+                size_mb = status['length'] / (1024 * 1024)
+                print(f"  - {f} ({size_mb:.2f} MB)")
+        except Exception as e:
+            print(f"  (not found or error: {e})")
 
-    dataset = "data/raw/telco_churn.csv"
-
-    if not os.path.exists(dataset):
-        print(f"Dataset not found: {dataset}")
-        print("Download with:")
-        print("wget -O data/raw/telco_churn.csv https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv")
-        return False
-
-    if upload_file(dataset, "telco_churn.csv"):
-        print("Dataset uploaded successfully.")
-        print(f"Stored in HDFS at: {HDFS_TARGET}/telco_churn.csv")
-        return True
-
-    print("Dataset upload failed.")
-    return False
-
-
-def list_hdfs_files():
-    """
-    List files stored in the HDFS raw directory.
-    """
-    print(f"Listing files in: {HDFS_TARGET}")
-    result = run_hdfs(f"-ls {HDFS_TARGET}")
-
-    if result:
-        print(result)
-    else:
-        print("Directory not found or empty.")
-
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="HDFS Ingestion Tools")
-    parser.add_argument("--upload", action="store_true", help="Upload main dataset")
-    parser.add_argument("--file", type=str, help="Upload a specific file")
-    parser.add_argument("--list", action="store_true", help="List files in HDFS")
+    parser = argparse.ArgumentParser(description='HDFS Data Ingestion')
+    parser.add_argument('csv_file', nargs='?', help='Path to CSV file to upload')
+    parser.add_argument('--verify', action='store_true', help='Verify HDFS connection')
+    parser.add_argument('--path', default='/churn/data/', help='HDFS destination path')
 
     args = parser.parse_args()
 
-    if args.upload:
-        upload_main_dataset()
-    elif args.file:
-        upload_file(args.file)
-    elif args.list:
-        list_hdfs_files()
+    if args.verify:
+        verify_hdfs()
+    elif args.csv_file:
+        ingest_to_hdfs(args.csv_file, args.path)
     else:
         print("Usage:")
-        print("  python src/ingest_hdfs.py --upload")
-        print("  python src/ingest_hdfs.py --file <path>")
-        print("  python src/ingest_hdfs.py --list")
-
+        print("  python src/ingest_hdfs.py data/raw/telco_churn.csv")
+        print("  python src/ingest_hdfs.py --verify")
