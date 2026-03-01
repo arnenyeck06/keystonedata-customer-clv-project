@@ -290,48 +290,13 @@ cd keystonedata-platform
 ---
 
 ### Step 4: Set Up Infrastructure with Docker Compose
-
-#### 4.1 Setting up Project files
 ```bash
 # Infrastructure
 nano docker-compose.yml
 nano requirements.txt
 nano .gitignore
-
-# Source files
-nano src/db_postgres.py
-nano src/db_cassandra.py
-nano src/db_hdfs.py
-nano src/ingest.py
-nano src/ingest_hdfs.py
-nano src/process.py
-nano src/process_spark.py
-nano src/train.py
-nano src/train_spark.py
-nano src/predict.py
-nano src/predict_spark.py
-nano src/kafka_producer.py
-nano src/kafka_consumer.py
-nano src/api.py
-
-# Dashboard
-nano dashboard/app.py
-nano dashboard/recommendations_engine.py
-nano dashboard/data_upload_processor.py
-nano dashboard/upload_page.py
-nano dashboard/predict_helper.py
-nano dashboard/data_processing.py
-
-# Scripts
-nano start_platform.sh
-nano stop_platform.sh
-
-# Tests
-nano tests/test_pipeline.py
 ```
-
-
-### Step 7: Start Docker Services
+### Start Docker Services
 
 ```bash
 # Start all services
@@ -347,6 +312,44 @@ docker compose ps
 Expected output: 4 containers running (postgres, cassandra, kafka, zookeeper)
 
 ---
+
+#### Setting up Project files
+```bash
+# Source files
+nano src/db_postgres.py
+nano src/db_cassandra.py
+nano src/db_hdfs.py
+nano src/ingest.py
+nano src/ingest_hdfs.py
+nano src/process.py
+nano src/process_spark.py
+nano src/train.py
+nano src/train_spark.py
+nano src/predict.py
+nano src/predict_spark.py
+nano src/kafka_producer.py
+nano src/kafka_consumer.py
+nano src/api.py
+```
+### Dashboard files
+
+```bash
+# Dashboard
+nano dashboard/app.py
+nano dashboard/recommendations_engine.py
+nano dashboard/data_upload_processor.py
+nano dashboard/upload_page.py
+nano dashboard/predict_helper.py
+nano dashboard/data_processing.py
+```
+
+# Scripts
+nano start_platform.sh
+nano stop_platform.sh
+
+# Tests
+nano tests/test_pipeline.py
+```
 
 ### Step 8: Create Virtual Environment
 
