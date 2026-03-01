@@ -407,7 +407,11 @@ python src/ingest.py --tickets 50
 
 # Train Spark ML model
 python src/train_spark.py --run
+```
+---
 
+#### Run Predictions
+```bash
 # Single customer prediction
 python src/predict_spark.py --customer <CUSTOMER_ID>
 
@@ -452,16 +456,17 @@ source venv/bin/activate
 streamlit run dashboard/app.py
 ```
 
-### Access the Applications
+### Services & ports
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| **Streamlit Dashboard** | http://localhost:8501 | Main user interface |
-| **FastAPI Backend** | http://localhost:8000 | REST API |
-| **API Documentation** | http://localhost:8000/docs | Interactive API docs |
-| **PostgreSQL** | localhost:5432 | Database |
-| **Cassandra** | localhost:9042 | NoSQL database |
-| **Kafka** | localhost:9092 | Message broker |
+| **Postgres** | http://localhost:5432 |
+| **Cassandra** | http://localhost:9042 |
+| **HDFS NameNode UI** | http://localhost:9870 |
+| **Kafka** | localhost:9092 |
+| **Spark Master UI** | localhost:8080 |
+| **FastAPI** | localhost:8000 |
+| **Streamlit Dashboard** | http://localhost:8501|
 
 ### Stop the Platform
 
