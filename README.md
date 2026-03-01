@@ -203,22 +203,6 @@ keystonedata-platform/
 
 ---
 
-## System Requirements
-
-### Hardware
-- **Minimum**: 8GB RAM, 4 CPU cores, 50GB disk space
-- **Recommended**: 16GB RAM, 8 CPU cores, 100GB SSD
-
-### Software
-- **Operating System**: Ubuntu 22.04 LTS (or later) / macOS
-- **Python**: 3.8 or higher
-- **Docker**: Latest version
-- **PostgreSQL**: 13 or higher
-- **Apache Kafka**: 3.0 or higher (via Docker)
-- **Cassandra**: 4.0 or higher (via Docker)
-
----
-
 ## Installation Instructions
 
 ### Step 1: System Setup
@@ -335,6 +319,7 @@ nano src/api.py
 
 ```bash
 # Dashboard
+
 nano dashboard/app.py
 nano dashboard/recommendations_engine.py
 nano dashboard/data_upload_processor.py
@@ -342,11 +327,14 @@ nano dashboard/upload_page.py
 nano dashboard/predict_helper.py
 nano dashboard/data_processing.py
 ```
-
+```bash
 # Scripts
 nano start_platform.sh
-nano stop_platform.sh
 
+nano stop_platform.sh
+```
+
+```bash
 # Tests
 nano tests/test_pipeline.py
 ```
