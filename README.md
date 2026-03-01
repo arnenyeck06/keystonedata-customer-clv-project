@@ -48,15 +48,16 @@ keystonedata-platform/
 │   ├── train.py
 │   ├── train_spark.py
 │   ├── predict.py
+│   ├── predict_spark.py        ← add this
 │   ├── kafka_producer.py
 │   ├── kafka_consumer.py
 │   └── api.py
 │
 ├── dashboard/
-│   ├── app.py                        
-│   ├── recommendations_engine.py     
-│   ├── data_upload_processor.py      
-│   ├── upload_page.py               
+│   ├── app.py
+│   ├── recommendations_engine.py
+│   ├── data_upload_processor.py
+│   ├── upload_page.py
 │   ├── predict_helper.py
 │   └── data_processing.py
 │
