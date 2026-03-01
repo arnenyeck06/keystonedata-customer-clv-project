@@ -191,7 +191,7 @@ keystonedata-platform/
 
 ## Installation Instructions
 
-### Step 1: System Setup
+### 1: System Setup
 
 #### 1.1 Update System (Ubuntu)
 ```bash
@@ -217,7 +217,7 @@ git --version
 
 ---
 
-### Step 2: Install Docker and Docker Compose
+### 2: Install Docker and Docker Compose
 
 #### Ubuntu
 ```bash
@@ -248,7 +248,7 @@ brew install --cask docker
 
 ---
 
-### Step 3: Clone Repository and Setup Project
+### 3: Clone Repository and Setup Project
 
 #### 3.1 Create Project Structure
 ```bash
@@ -259,7 +259,7 @@ cd keystonedata-platform
 
 ---
 
-### Step 4: Set Up Infrastructure with Docker Compose
+### 4: Set Up Infrastructure with Docker Compose
 ```bash
 # Infrastructure
 nano docker-compose.yml
@@ -324,8 +324,11 @@ nano stop_platform.sh
 # Tests
 nano tests/test_pipeline.py
 ```
+---
+#### After running each nano command, paste the file contents, then save.
+--- 
 
-### Step 8: Create Virtual Environment
+### 5: Create Virtual Environment
 
 ```bash
 # Create virtual environment
@@ -347,7 +350,7 @@ pip list | grep -E "pandas|scikit-learn|fastapi|streamlit"
 
 ---
 
-### Step 9: Download Dataset
+### 6: Download Dataset
 
 ```bash
 # Download IBM Telco Customer Churn dataset
@@ -362,7 +365,7 @@ Expected: ~7044 lines (7043 customers + 1 header)
 
 ---
 
-### Step 10: Initialize Database
+### 7: Initialize Database
 
 ```bash
 # PostgreSQL
@@ -386,19 +389,34 @@ docker exec -it churn-kafka kafka-topics --create \
 
 ---
 
-### Step 11: Load Data into postgres
+### Step 11: Load Data 
 
 ```bash
 # Load customer data into PostgreSQL
 python src/ingest.py --batch data/raw/telco_churn.csv
+
+# into HDFS
+python src/ingest_hdfs.py data/raw/telco_churn.csv
+python src/ingest_hdfs.py --verify
 
 # Generate sample events in Cassandra
 python src/ingest.py --events 100
 
 # Generate sample support tickets
 python src/ingest.py --tickets 50
-```
 
+# Train Spark ML model
+python src/train_spark.py --run
+
+# Single customer prediction
+python src/predict_spark.py --customer <CUSTOMER_ID>
+
+# Batch prediction
+python src/predict_spark.py --batch <ID1> <ID2> <ID3>
+
+# High-risk scan
+python src/predict_spark.py --high-risk
+```
 ---
 
 ## Running the Project
