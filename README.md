@@ -2,20 +2,6 @@
 
 **Keystone Data Solutions**
 
-## Table of Contents
-1. [Description of the Problem](#description-of-the-problem)
-2. [Platform Architecture](#platform-architecture)
-3. [Technology Stack](#technology-stack)
-4. [Key Features](#key-features)
-5. [System Requirements](#system-requirements)
-6. [Installation Instructions](#installation-instructions)
-7. [Running the Project](#running-the-project)
-8. [Dashboard Features](#dashboard-features)
-9. [Model Performance](#model-performance)
-10. [Troubleshooting](#troubleshooting)
-
----
-
 ## Description of the Problem
 
 ### Executive Summary
