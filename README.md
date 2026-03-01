@@ -291,169 +291,45 @@ cd keystonedata-platform
 
 ### Step 4: Set Up Infrastructure with Docker Compose
 
-#### 4.1 Create docker-compose.yml
+#### 4.1 Setting up Project files
 ```bash
+# Infrastructure
 nano docker-compose.yml
-```
-
-Copy and paste the Docker Compose configuration:
-```yaml
-version: '3.8'
-
-services:
-  postgres:
-    image: postgres:14
-    container_name: churn-postgres
-    environment:
-      POSTGRES_USER: churn_user
-      POSTGRES_PASSWORD: churn_pass
-      POSTGRES_DB: churn_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  cassandra:
-    image: cassandra:4.1
-    container_name: churn-cassandra
-    ports:
-      - "9042:9042"
-    environment:
-      CASSANDRA_CLUSTER_NAME: ChurnCluster
-      CASSANDRA_DC: dc1
-      CASSANDRA_RACK: rack1
-    volumes:
-      - cassandra_data:/var/lib/cassandra
-    restart: unless-stopped
-
-  kafka:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: churn-kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
-    restart: unless-stopped
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
-    container_name: churn-zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    volumes:
-      - zookeeper_data:/var/lib/zookeeper
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-  cassandra_data:
-  zookeeper_data:
-```
-
----
-
-### Step 5: Create requirements.txt
-
-```bash
 nano requirements.txt
-```
-
-Copy and paste:
-```bash
-# Data Processing
-pandas==2.0.0
-numpy==1.24.0
-
-# Machine Learning
-scikit-learn==1.3.0
-xgboost==1.7.6
-imbalanced-learn==0.11.0
-
-# Visualization
-matplotlib==3.7.0
-seaborn==0.12.0
-plotly==5.17.0
-
-# Jupyter
-jupyter==1.0.0
-notebook==7.0.0
-
-# Database Connectors
-psycopg2-binary==2.9.9
-cassandra-driver==3.28.0
-sqlalchemy==2.0.0
-
-# Kafka
-kafka-python==2.0.2
-
-# API & Dashboard
-fastapi==0.104.1
-uvicorn==0.24.0
-streamlit==1.28.0
-pydantic==2.5.0
-
-# File Processing
-openpyxl==3.1.2
-
-# Utilities
-joblib==1.3.0
-python-dotenv==1.0.0
-requests==2.31.0
-```
-
----
-
-### Step 6: Create .gitignore
-
-```bash
 nano .gitignore
+
+# Source files
+nano src/db_postgres.py
+nano src/db_cassandra.py
+nano src/db_hdfs.py
+nano src/ingest.py
+nano src/ingest_hdfs.py
+nano src/process.py
+nano src/process_spark.py
+nano src/train.py
+nano src/train_spark.py
+nano src/predict.py
+nano src/predict_spark.py
+nano src/kafka_producer.py
+nano src/kafka_consumer.py
+nano src/api.py
+
+# Dashboard
+nano dashboard/app.py
+nano dashboard/recommendations_engine.py
+nano dashboard/data_upload_processor.py
+nano dashboard/upload_page.py
+nano dashboard/predict_helper.py
+nano dashboard/data_processing.py
+
+# Scripts
+nano start_platform.sh
+nano stop_platform.sh
+
+# Tests
+nano tests/test_pipeline.py
 ```
 
-Copy and paste:
-```bash
-# Python
-**/__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-*.egg-info/
-dist/
-build/
-
-# Notebooks
-.ipynb_checkpoints/
-
-# Data Files
-data/raw/*
-data/processed/*
-data/models/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
-!data/models/.gitkeep
-
-# Environment
-.env
-.env.local
-
-# OS
-.DS_Store
-Thumbs.db
-```
-
----
 
 ### Step 7: Start Docker Services
 
