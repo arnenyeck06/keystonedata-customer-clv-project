@@ -128,56 +128,6 @@ keystonedata-platform/
 
 ---
 
-## Key Features
-
-### Dashboard Features
-
-#### 1. **Executive Dashboard**
-- Real-time KPI cards (Total Customers, Churn Rate, Retained Customers)
-- Customer distribution visualization
-- Financial impact analysis
-- Performance metrics tracking
-- System health monitoring
-
-#### 2. **Single Customer Prediction**
-- Enter individual customer ID
-- Get instant churn probability
-- View risk level (HIGH/MEDIUM/LOW)
-- See customer profile details
-- Historical prediction tracking
-
-#### 3. **Batch Upload & Predict** ⭐ NEW
-- Upload CSV or Excel files with customer data
-- Process hundreds or thousands of customers at once
-- Automatic data validation and cleaning
-- Generate predictions for entire dataset
-- Download results in CSV or Excel format
-- Filter and sort results by risk level
-- Sample template download
-
-#### 4. **High-Risk Customer Monitoring**
-- Auto-updating table of high-risk customers
-- Real-time risk scoring
-- Sortable and filterable views
-- Export capabilities
-- Prioritization for retention campaigns
-
-#### 5. **Analytics & Insights**
-- Churn rate by contract type
-- Churn distribution by tenure
-- Interactive visualizations
-- Trend analysis
-- Custom date range filtering
-
-#### 6. **System Status**
-- Database connection monitoring
-- API server health checks
-- Docker services status
-- Model performance metrics
-- System uptime tracking
-
----
-
 ## Installation Instructions
 
 ### 1: System Setup
