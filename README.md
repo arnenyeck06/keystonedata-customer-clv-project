@@ -397,15 +397,15 @@ streamlit run dashboard/app.py
 
 ### Services & ports
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| **Postgres** | http://localhost:5432 |
-| **Cassandra** | http://localhost:9042 |
-| **HDFS NameNode UI** | http://localhost:9870 |
-| **Kafka** | localhost:9092 |
-| **Spark Master UI** | localhost:8080 |
-| **FastAPI** | localhost:8000 |
-| **Streamlit Dashboard** | http://localhost:8501|
+| Service | URL 
+|---------|-----
+| **Postgres** | http://localhost:5432 
+| **Cassandra** | http://localhost:9042 
+| **HDFS NameNode UI** | http://localhost:9870 
+| **Kafka** | localhost:9092 
+| **Spark Master UI** | localhost:8080 
+| **FastAPI** | localhost:8000 
+| **Streamlit Dashboard** | http://localhost:8501
 
 ### Stop the Platform
 
