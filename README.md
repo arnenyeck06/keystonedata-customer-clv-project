@@ -4,7 +4,7 @@
 
 ## Overview
 
-Customer churn costs businesses millions annually. ChurnGuard is a Big Data platform that predicts which customers are likely to leave — before they do — so retention teams can act early.
+Customer churn costs businesses millions annually. ChurnGuard is a Big Data platform that predicts which customers are likely to leave before they do, so retention teams can act early.
 
 Key stakeholders: Marketing, Customer Service, Data Science, and Executive Leadership.
 
@@ -48,7 +48,7 @@ keystonedata-platform/
 │   ├── train.py
 │   ├── train_spark.py
 │   ├── predict.py
-│   ├── predict_spark.py        ← add this
+│   ├── predict_spark.py       
 │   ├── kafka_producer.py
 │   ├── kafka_consumer.py
 │   └── api.py
