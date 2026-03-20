@@ -2,11 +2,18 @@
 
 **Keystone Data Solutions**
 
-## Overview
+## Problem Description
+Customer churn is one of the most costly challenges facing subscription-based businesses. Identifying at-risk customers before they leave is critical to retaining revenue and reducing acquisition costs. However, most organizations lack the infrastructure to efficiently ingest, process, and analyze customer behavior data at scale, let alone deliver real-time predictions to the teams that need them.
 
-Customer churn costs businesses millions annually. ChurnGuard is a Big Data platform that predicts which customers are likely to leave before they do, so retention teams can act early.
+ChurnGuard addresses this by building an end-to-end big data pipeline that:
 
-Key stakeholders: Marketing, Customer Service, Data Science, and Executive Leadership.
+Ingests raw customer data from multiple sources into PostgreSQL and Cassandra
+Processes and transforms data at scale using Apache Spark and Hadoop (HDFS)
+Trains and evaluates machine learning models (XGBoost, scikit-learn) to predict churn probability
+Streams real-time predictions through Kafka pipelines
+Delivers actionable insights through an interactive Streamlit dashboard with a built-in recommendations engine
+
+The goal is to empower business and analytics teams with a reliable, scalable, and automated data platform that enables data-driven decision making to proactively reduce customer churn.
 
 ---
 ## Platform structure
