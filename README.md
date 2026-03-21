@@ -85,10 +85,22 @@ keystonedata-platform/
 ---
 ## Data Overview
 <p>
-  <img src="https://github.com/user-attachments/assets/6bb63235-d1ed-47dd-9fc1-3633a0cd4c53" width="100%" />
+  <img src="https://github.com/user-attachments/assets/6bb63235-d1ed-47dd-9fc1-3633a0cd4c53" width="780" />
 </p>
 
 ---
+## Exploratory Data Analysis (EDA)
+
+# Some Key findings and visualizations:
+-- # Tenure Distribution by Churn
+# Churn is highly concentrated in months 1 to 5. Customers who survive past 10 months rarely churn.
+
+
+# Monthly Charges Distribution by Churn
+# The 'non-churned' spikes at the low end, showing that most retained customers are on lower-cost plans. 
+# A solution would be to review pricing for mid-tier plans.
+---
+
 ## Technology Stack
 
 ### Keystone Data Solutions' Complete Tech Stack
