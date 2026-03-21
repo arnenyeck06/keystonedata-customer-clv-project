@@ -93,12 +93,12 @@ keystonedata-platform/
 
 # Some Key findings and visualizations:
  # Tenure Distribution by Churn
-# Churn is highly concentrated in months 1 to 5. Customers who survive past 10 months rarely churn.
-<img src="https://github.com/user-attachments/assets/13e3d351-8c4e-421a-948f-4ae9804283aa" width="380" />
+Churn is highly concentrated in months 1 to 5. Customers who survive past 10 months rarely churn.
+<img src="https://github.com/user-attachments/assets/13e3d351-8c4e-421a-948f-4ae9804283aa" width="500" />
 
 # Monthly Charges Distribution by Churn
-# Customers that do not churn are concentrated at the low end, showing that most retained customers are on lower-cost plans. 
-<img src="https://github.com/user-attachments/assets/e00ee699-a8ac-47c3-af5e-5fd02a65000e" width="380" />
+ Customers that do not churn are concentrated at the low end, showing that most retained customers are on lower-cost plans. 
+<img src="https://github.com/user-attachments/assets/e00ee699-a8ac-47c3-af5e-5fd02a65000e" width="500" />
 
 ---
 
