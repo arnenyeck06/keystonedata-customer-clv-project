@@ -83,6 +83,12 @@ keystonedata-platform/
 ```
 
 ---
+## Data Overview
+<p>
+  <img src="https://github.com/user-attachments/assets/6bb63235-d1ed-47dd-9fc1-3633a0cd4c53" width="100%" />
+</p>
+
+---
 ## Technology Stack
 
 ### Keystone Data Solutions' Complete Tech Stack
