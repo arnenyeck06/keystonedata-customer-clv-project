@@ -19,6 +19,9 @@ Delivers actionable insights through an interactive Streamlit dashboard with a b
 The goal is to empower business and analytics teams with a reliable, scalable, and automated data platform that enables data-driven decision making to proactively reduce customer churn.
 
 ---
+
+
+---
 ## Platform structure
 
 ```bash
@@ -115,10 +118,20 @@ Churners concentrate on low total charges,
 They leave early, so they never accumulate high totals.
 
 <p>
-  <img src="https://github.com/user-attachments/assets/a55f16c7-73dd-40a4-af73-4c88381167cf" width="380" />
-  <img src="SECOND_IMAGE_URL" width="600" />
+  <img src="https://github.com/user-attachments/assets/a55f16c7-73dd-40a4-af73-4c88381167cf" width="800" />
+  <img src="SECOND_IMAGE_URL" width="800" />
 </p>
+
+
 ---
+# Categorical Values
+
+<img src="https://github.com/user-attachments/assets/1bc13e4a-8a95-4080-8262-21997bfb1150" width="800" />
+
+---
+# Numerical Values
+
+<img src="https://github.com/user-attachments/assets/1bc13e4a-8a95-4080-8262-21997bfb1150" width="800" />
 
 ## Technology Stack
 
