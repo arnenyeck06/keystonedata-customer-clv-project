@@ -163,10 +163,10 @@ They leave early, so they never accumulate high totals.
 
 ---
 ### Key Observation:
-All models performed well. We used Logistic regression as the baseline. Random forest had high accuracy at 78%, with a 60% precision, recall dropped to 45%.
-SVM accuracy went from 79% to 77% after SMOTE. 
-The best model is XGBoost with the highest recall at 78%. We chose this model as the winner because it also has the best score at 0.61, and an ROC-AUC of 0.83.
-IT is the production model of choice.
+Logistic Regression as our baseline, which caught 70% of churners but struggled with false alarms at 49% precision.
+Random Forest improved overall accuracy to 78% and precision to 60%, but missed over half of actual churners with a recall of only 45%.
+SVM raw accuracy was at 79%, but required both SMOTE and threshold tuning to bring recall up to a good level, landing at 72% accuracy and 77% recall after adjustments.
+The winner is **XGBoost**, which delivered the best balance across every metric that matters: **78% recall, an F1-Score of 0.61, and an ROC-AUC of 0.83**.
 
 ---
 
