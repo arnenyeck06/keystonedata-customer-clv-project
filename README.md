@@ -138,8 +138,15 @@ They leave early, so they never accumulate high totals.
 ---
 
 ## Logistic Regression
-
 <img src="https://github.com/user-attachments/assets/571c5f8f-2c7f-4907-b195-139fd66f5294" width="800" />
+
+## Random Forest
+<img src="https://github.com/user-attachments/assets/bfaf8823-8a26-4ac2-9cb2-329de06a5a57" width="800" />
+
+## Support Vector Method (SVM)
+<img src="https://github.com/user-attachments/assets/dfb1541d-799e-4332-af0b-b64f493ab91c" width="800" />
+
+## SVM + 
 
 ## Technology Stack
 
