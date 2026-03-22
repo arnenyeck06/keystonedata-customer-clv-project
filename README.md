@@ -94,7 +94,7 @@ keystonedata-platform/
 ---
 ## Exploratory Data Analysis (EDA)
 
-# Some Key findings and visualizations:
+# Some Key findings and visualizations: Please visit the notebooks folder for full data analysis
  # Tenure Distribution by Churn
 Churn is highly concentrated in months 1 to 5. Customers who survive past 10 months rarely churn.
 <img src="https://github.com/user-attachments/assets/13e3d351-8c4e-421a-948f-4ae9804283aa" width="500" />
@@ -132,9 +132,10 @@ They leave early, so they never accumulate high totals.
 # Numerical Values
 
 <p>
-  <img src="https://github.com/user-attachments/assets/dd6715c7-e238-4fed-9c46-a3d8dabd2eae" width="800" />
+  <img src="https://github.com/user-attachments/assets/dd6715c7-e238-4fed-9c46-a3d8dabd2eae" width="850" />
   <img src="SECOND_IMAGE_URL" width="800" />
 </p>
+
 
 ## Technology Stack
 
