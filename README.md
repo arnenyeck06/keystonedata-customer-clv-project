@@ -1,8 +1,8 @@
 # Customer Churn Prediction Data Platform
 A production-ready machine learning system for predicting customer churn using telecom behavioral data, account history, and service usage patterns. This project implements a complete MLOps workflow, from exploratory data analysis and feature engineering to model training, REST API deployment, and Docker containerization powered by XGBoost, Apache Spark, and a real-time Kafka streaming pipeline.
 <p>
-  <img src="https://github.com/user-attachments/assets/bdd683a6-90fe-48c8-af5b-a8f6f24a5ed1" width="390" />
-  <img src="https://github.com/user-attachments/assets/877b7994-2b2d-497c-bb49-f97ee52e3aa6" width="390" />
+  <img src="https://github.com/user-attachments/assets/bdd683a6-90fe-48c8-af5b-a8f6f24a5ed1" width="900" />
+  <img src="https://github.com/user-attachments/assets/877b7994-2b2d-497c-bb49-f97ee52e3aa6" width="900" />
 </p>
 
 ## Problem Description
