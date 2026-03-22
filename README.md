@@ -583,11 +583,12 @@ deactivate
 
 ### Current Models
 
-| Model | Accuracy | Precision | Recall | F1-Score |
-|-------|----------|-----------|--------|----------|
-| **XGBoost** | 94.2% | 0.89 | 0.85 | 0.87 |
-| **SVM** | 91.5% | 0.84 | 0.82 | 0.83 |
-| **Logistic Regression** | 88.3% | 0.79 | 0.76 | 0.77 |
+| Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC
+|-------|----------|-----------|--------|----------|----------|
+|**Logistic Regression** | 73% | 0.49 | 0.70 | 0.58 |
+|**Random Forest** | 78% | 0.60 | 0.45 | 0.52 |
+|**SVM + SMOTE + THRESHOLD** | 75% | 0.51 | 0.68 | 0.52 |
+| **XGBoost** | 73% | 0.50 | 0.78 | 0.61 | 0.83|
 
 ### Model Features
 - 20+ engineered features
