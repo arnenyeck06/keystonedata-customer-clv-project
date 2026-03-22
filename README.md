@@ -158,6 +158,9 @@ They leave early, so they never accumulate high totals.
 ## Xgboost Validation curve
 <img src="https://github.com/user-attachments/assets/77cc7afe-ed70-43fe-ade8-80df170a9b8c" width="800" />
 
+## ROC Curve Comparison
+<img src="https://github.com/user-attachments/assets/6f0e611d-6ab6-4f77-bc04-4d40c9661554" width="800" />
+
 ## Technology Stack
 
 ### Keystone Data Solutions' Complete Tech Stack
