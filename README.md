@@ -135,7 +135,11 @@ They leave early, so they never accumulate high totals.
   <img src="https://github.com/user-attachments/assets/dd6715c7-e238-4fed-9c46-a3d8dabd2eae" width="850" />
   <img src="SECOND_IMAGE_URL" width="800" />
 </p>
+---
 
+## Logistic Regression
+
+<img src="https://github.com/user-attachments/assets/571c5f8f-2c7f-4907-b195-139fd66f5294" width="800" />
 
 ## Technology Stack
 
