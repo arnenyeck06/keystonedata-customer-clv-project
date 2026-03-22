@@ -161,6 +161,13 @@ They leave early, so they never accumulate high totals.
 ## ROC Curve Comparison
 <img src="https://github.com/user-attachments/assets/6f0e611d-6ab6-4f77-bc04-4d40c9661554" width="800" />
 
+---
+### Key Observation:
+Logistic regression was used as a baseline, with a recall of 70%, so it is best at catching actual churning customers. It has a weak precision at 49%.
+Random Forest improved in accuracy at 78%, and had better precision at 60%. The recall dropped to 45%. The model missed too many actual churners. 
+Business stakeholders could decide which fits better depending on the business context.
+
+
 ## Technology Stack
 
 ### Keystone Data Solutions' Complete Tech Stack
