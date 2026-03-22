@@ -143,10 +143,18 @@ They leave early, so they never accumulate high totals.
 ## Random Forest
 <img src="https://github.com/user-attachments/assets/bfaf8823-8a26-4ac2-9cb2-329de06a5a57" width="800" />
 
-## Support Vector Method (SVM)
+## Support Vector Method (SVM) + SMOTE
 <img src="https://github.com/user-attachments/assets/dfb1541d-799e-4332-af0b-b64f493ab91c" width="800" />
 
-## SVM + 
+## SVM + SMOTE-Threshold tuning
+<img src="https://github.com/user-attachments/assets/f8f6dc69-6ba8-4ea7-a099-db373ec58be8" width="800" />
+
+## Validation curve -SVM + SMOTE + Threshold
+<img src="https://github.com/user-attachments/assets/91aee315-8161-4e89-8728-2efcbe1fe076" width="800" />
+
+## Xgboost
+<img src="https://github.com/user-attachments/assets/4ecd7614-9562-492d-b0cd-df6dd44cb211" width="800" />
+
 
 ## Technology Stack
 
