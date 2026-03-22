@@ -131,7 +131,10 @@ They leave early, so they never accumulate high totals.
 ---
 # Numerical Values
 
-<img src="https://github.com/user-attachments/assets/1bc13e4a-8a95-4080-8262-21997bfb1150" width="800" />
+<p>
+  <img src="https://github.com/user-attachments/assets/dd6715c7-e238-4fed-9c46-a3d8dabd2eae" width="800" />
+  <img src="SECOND_IMAGE_URL" width="800" />
+</p>
 
 ## Technology Stack
 
