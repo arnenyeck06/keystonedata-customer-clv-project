@@ -155,6 +155,8 @@ They leave early, so they never accumulate high totals.
 ## Xgboost
 <img src="https://github.com/user-attachments/assets/4ecd7614-9562-492d-b0cd-df6dd44cb211" width="800" />
 
+## Xgboost Validation curve
+<img src="https://github.com/user-attachments/assets/77cc7afe-ed70-43fe-ade8-80df170a9b8c" width="800" />
 
 ## Technology Stack
 
