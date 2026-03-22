@@ -163,9 +163,13 @@ They leave early, so they never accumulate high totals.
 
 ---
 ### Key Observation:
-Logistic regression was used as a baseline, with a recall of 70%, so it is best at catching actual churning customers. It has a weak precision at 49%.
-Random Forest improved in accuracy at 78%, and had better precision at 60%. The recall dropped to 45%. The model missed too many actual churners. 
-Business stakeholders could decide which fits better depending on the business context.
+All models performed well. We used Logistic regression as the baseline. Random forest had high accuracy at 78%, with a 60% precision, recall dropped to 45%.
+SVM accuracy went from 79% to 77% after SMOTE. 
+The best model is XGBoost with the highest recall at 78%. We chose this model as the winner because it also has the best score at 0.61, and an ROC-AUC of 0.83.
+IT is the production model of choice.
+
+---
+
 
 
 ## Technology Stack
