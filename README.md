@@ -677,8 +677,8 @@ pip install -r requirements.txt
 
 Base URL: `http://localhost:8000`
 
-| Endpoint | Method |
-|----------|--------|
+| Endpoint | Method | Description|
+|----------|--------|-------------|
 | `/` | GET | API root information |
 | `/health` | GET | Health check |
 | `/predict/{customer_id}` | GET | Single customer prediction |
