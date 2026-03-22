@@ -96,10 +96,28 @@ keystonedata-platform/
 Churn is highly concentrated in months 1 to 5. Customers who survive past 10 months rarely churn.
 <img src="https://github.com/user-attachments/assets/13e3d351-8c4e-421a-948f-4ae9804283aa" width="500" />
 
+---
 # Monthly Charges Distribution by Churn
- Customers that do not churn are concentrated at the low end, showing that most retained customers are on lower-cost plans. 
+ Customers who do not churn are concentrated at the low end, showing that most retained customers are on lower-cost plans. 
 <img src="https://github.com/user-attachments/assets/e00ee699-a8ac-47c3-af5e-5fd02a65000e" width="500" />
 
+---
+* Tenure 
+Churners (red) are heavily concentrated at low tenure between 0 and 20 months
+Non-churners (green) are spread across all tenure lengths.
+
+* Monthly Charges
+Churners cluster at higher monthly charges between $60 and $100+
+Non-churners are more spread across lower charges.
+
+* Total Charges
+Churners concentrate on low total charges,
+They leave early, so they never accumulate high totals.
+
+<p>
+  <img src="https://github.com/user-attachments/assets/a55f16c7-73dd-40a4-af73-4c88381167cf" width="380" />
+  <img src="SECOND_IMAGE_URL" width="600" />
+</p>
 ---
 
 ## Technology Stack
