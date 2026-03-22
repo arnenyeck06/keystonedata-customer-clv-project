@@ -17,10 +17,7 @@ Trains and evaluates machine learning models (XGBoost, scikit-learn) to predict 
 Streams real-time predictions through Kafka pipelines
 Delivers actionable insights through an interactive Streamlit dashboard with a built-in recommendations engine
 
-The goal is to empower business and analytics teams with a reliable, scalable, and automated data platform that enables data-driven decision making to proactively reduce customer churn.
-
----
-
+The goal is to empower business and analytics teams with a reliable, scalable, and automated data platform that enables data-driven decision-making. This will lead to a proactive reduction in customer churn.
 
 ---
 ## Platform structure
